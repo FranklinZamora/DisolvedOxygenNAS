@@ -141,3 +141,19 @@ void OxygenNAS::sleepNAS()
   Wire.write("Sleep");
   Wire.endTransmission();
 }
+
+void OxygenNAS::ledControlNAS(bool state)
+{
+  Wire.beginTransmission(_address);
+  
+  if (state) 
+  {
+    Wire.write("L,1"); // remplaza "L,1" con el comando correcto para tu sensor
+  } 
+  else 
+  {
+    Wire.write("L,0"); // remplaza "L,0" con el comando correcto para tu sensor
+  }
+  
+  Wire.endTransmission();
+}
