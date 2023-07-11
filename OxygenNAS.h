@@ -11,7 +11,8 @@ class OxygenNAS
     float getDoNAS();
     float getSaturacionOxigenoNAS();
     void sleepNAS();
-    void ledControlNAS(bool state); // nuevo método para controlar el LED
+    void ledControlNAS(bool state); 
+    String find();
   private:
     int _address;
     float _DO;
