@@ -33,7 +33,7 @@ OxygenNAS sensor(97); // replace 97 with your sensor's I2C address
 ```
 4. Use the `update`, `getDO`, `getSaturacionOxigeno`, `sleep`, `find`, and `ledControl` methods to interact with the sensor.
 
-The `ledControlNAS()` method is a function in the `OxygenNAS` library that takes a boolean as an argument. It sends a command over I2C to control the state of the sensor's built-in LED. If true is passed to this method, the LED will turn on. If false is passed, the LED will turn off. Please refer to your sensor's documentation to ensure the correct command is sent for your specific model.
+The `ledControlNAS()` method is a function in the `OxygenNAS` library that takes a boolean as an argument. It sends a command over I2C to control the state of the sensor's built-in LED. If true is passed to this method, the LED will turn on. If false is passed, the LED will turn off. 
 
 ```c++
 sensor.ledControlNAS(false); // Turn off the LED
