@@ -1,4 +1,4 @@
-#include <OxygenNAS.h> //Download library made by ochoa technology in: https://github.com/FranklinZamora/OxygenNAS/tree/master/OxygenNASLib
+#include <OxygenNAS.h> //Download library made by ochoa technology in: https://github.com/FranklinZamora/DisolvedOxygenNAS.git
 #include <Arduino.h>
 
 OxygenNAS sensor(97); // replace 97 with your sensor's I2C address
