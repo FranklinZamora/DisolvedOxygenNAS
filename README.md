@@ -1,4 +1,4 @@
-<h1 align="center"> Disolved Oxygen NAS lib </h1>
+<h1 align="center"> Sensors NAS lib </h1>
 
 
 ![Ochoa y nas](https://github.com/FranklinZamora/DisolvedOxygenNAS/assets/139190968/15cde0c5-1ac3-41b4-be1b-8bb1c6e12295) 

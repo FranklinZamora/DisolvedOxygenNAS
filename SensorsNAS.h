@@ -1,5 +1,5 @@
-#ifndef OxygenNAS_h
-#define OxygenNAS_h
+#ifndef SensorsNAS_h
+#define SensorsNAS_h
 
 #include "Arduino.h"
 #include "Wire.h"
@@ -18,5 +18,16 @@ class OxygenNAS
     float _DO;
     float _saturacionOxigeno;
 };
+
+class pH_EZO {
+public:
+  pH_EZO(uint8_t sensorAddress = 0x63);
+  float readpH();
+
+private:
+  uint8_t _sensorAddress;
+};
+
+
 
 #endif
