@@ -202,30 +202,29 @@ String OxygenNAS::find()
     Serial.println("Done");
 }
 
-pH_EZO::pH_EZO(uint8_t sensorAddress) {
-  _sensorAddress = sensorAddress;
+PhNAS::PhNAS(int address)
+{
+  _address = address;
   Wire.begin();
-}
+} 
 
-float pH_EZO::readpH() {
-  Wire.beginTransmission(_sensorAddress);
-  Wire.write('r');
-  Wire.endTransmission(false);
 
+String PhNAS::readPH() 
+{
+  char data[20];
+  byte byteCount;
+
+  Wire.beginTransmission(_address);
+  Wire.write("R");
+  Wire.endTransmission();
   delay(1000);
 
-  Wire.requestFrom(_sensorAddress, 7);
-  while (Wire.available() < 7);
-
-  char data[7];
-  for (int i = 0; i < 7; i++) {
+  Wire.requestFrom(_address, 20, 1);
+  byteCount = Wire.available();
+  for (byte i = 0; i < byteCount; i++) {
     data[i] = Wire.read();
   }
+  data[byteCount] = '\0';
 
-  if (data[0] == 'R') {
-    float pHValue = atof(&data[1]);
-    return pHValue;
-  }
-
-  return -1.0;
+  return String(data);  // Devuelve la cadena de caracteres en lugar de un float
 }

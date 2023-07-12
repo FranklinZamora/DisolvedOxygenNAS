@@ -1,18 +1,17 @@
 #include <SensorsNAS.h>
 
-const uint8_t sensorAddress = 99;
-pH_EZO phSensor(sensorAddress);
+PhNAS phSensor(99);
 
 void setup()
 {
-    Wire.begin();
     Serial.begin(9600);
 }
 
 void loop()
 {
-  float pH = phSensor.readpH();
-  Serial.print("pH: ");
+  String pH = phSensor.readPH();  // Lee el valor de pH como flotante
+  float pH_ = pH.toFloat();
+  Serial.println(pH_);
   Serial.println(pH);
 
   delay(1000);

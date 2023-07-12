@@ -19,13 +19,13 @@ class OxygenNAS
     float _saturacionOxigeno;
 };
 
-class pH_EZO {
+class PhNAS {
 public:
-  pH_EZO(uint8_t sensorAddress = 0x63);
-  float readpH();
+  PhNAS(int address);
+  String readPH();
 
 private:
-  uint8_t _sensorAddress;
+  int _address;
 };
 
 
