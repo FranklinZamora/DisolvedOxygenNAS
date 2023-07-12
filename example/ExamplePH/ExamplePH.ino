@@ -9,10 +9,8 @@ void setup()
 
 void loop()
 {
-  String pH = phSensor.readPH();  // Lee el valor de pH como flotante
-  float pH_ = pH.toFloat();
-  Serial.println(pH_);
-  Serial.println(pH);
-
+  Serial.print("PH: ");
+  Serial.println(phSensor.readPH());  // Lee el valor de pH como flotante
+  
   delay(1000);
 }   

@@ -22,10 +22,12 @@ class OxygenNAS
 class PhNAS {
 public:
   PhNAS(int address);
-  String readPH();
+  float readPH();
 
 private:
   int _address;
+  String x;
+  float _PH;
 };
 
 

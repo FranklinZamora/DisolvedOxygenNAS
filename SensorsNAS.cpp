@@ -209,22 +209,28 @@ PhNAS::PhNAS(int address)
 } 
 
 
-String PhNAS::readPH() 
+float PhNAS::readPH() 
 {
-  char data[20];
-  byte byteCount;
+  byte data[6];
 
   Wire.beginTransmission(_address);
   Wire.write("R");
   Wire.endTransmission();
-  delay(1000);
+  delay(1000); //Cambiar 
 
-  Wire.requestFrom(_address, 20, 1);
-  byteCount = Wire.available();
-  for (byte i = 0; i < byteCount; i++) {
+
+  Wire.requestFrom(_address, 6, 1);
+  x = "";
+  for (int i = 0; i <= 5 ; i++)
+  {
     data[i] = Wire.read();
+    if (i != 0)
+    {
+      x += char(data[i]);
+    }
+    //x += String(data[i]);
+    //Serial.println(data[i]);
   }
-  data[byteCount] = '\0';
-
-  return String(data);  // Devuelve la cadena de caracteres en lugar de un float
+  _PH = x.toFloat();
+  return _PH;
 }
