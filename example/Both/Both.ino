@@ -14,6 +14,13 @@ void loop()
     float sat = DOsensor.getSaturacionOxigenoNAS();
     float Ph = PHsensor.readPH();
 
-    Serial.println(String(DO) + "/" + String(sat) + "/" + String(Ph));
+    Serial.print("~/");
+    Serial.print(DO);
+    Serial.print("/");
+    Serial.print(sat);
+    Serial.print("/");
+    Serial.print(Ph);
+    Serial.print("/");
+    Serial.println("");
     
 }
