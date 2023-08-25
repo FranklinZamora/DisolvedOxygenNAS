@@ -1,16 +1,14 @@
-#include <SensorsNAS.h>
+#include <SensorsNAS.h> //Download library made by ochoa technology in: https://github.com/FranklinZamora/SensorsNAS
 
-PhNAS phSensor(99);
+SensorsNAS phSensor(99); // Replace 97 with your sensor's I2C address
 
 void setup()
 {
-    Serial.begin(9600);
+  Serial.begin(9600);
 }
 
 void loop()
 {
   Serial.print("PH: ");
-  Serial.println(phSensor.readPH());  // Lee el valor de pH como flotante
-  
-  delay(1000);
-}   
+  Serial.println(phSensor.getPH());
+}
