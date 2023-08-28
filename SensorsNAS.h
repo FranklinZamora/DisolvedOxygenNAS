@@ -12,9 +12,9 @@ public:
   float getSAT();
   float getPH();
   float getEC();
-  String getTDS();
-  String getSAL();
-  String getSG();
+  float getTDS();
+  float getSAL();
+  float getSG();
   float getTempCompensationDO();
   float getSalCompensationDO();
   float getAtmosphericPressureCompensation();
@@ -47,9 +47,9 @@ private:
   float _saturacionOxigeno;
   float _PH;
   float _EC;
-  String _TDS;
-  String _SAL;
-  String _SG;
+  float _TDS;
+  float _SAL;
+  float _SG;
   byte _array;
 };
 

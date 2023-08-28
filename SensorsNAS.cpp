@@ -692,10 +692,14 @@ float SensorsNAS::getEC()
   return _EC;
 } // End
 
-String SensorsNAS::getTDS()
+float SensorsNAS::getTDS()
 {
-  char data[32];
-  char EC_str[10], TDS_str[10], SAL_str[10], SG_str[10];
+  byte code = 0;
+  char ec_data[32]; // we make a 32 byte character array to hold incoming data from the EC circuit.
+  byte in_char = 0;
+  byte i = 0;
+  byte serial_event = 0;
+  char *tds;
 
   Wire.beginTransmission(_address);
   Wire.write("R");
@@ -706,52 +710,40 @@ String SensorsNAS::getTDS()
   {
   }
 
-  Wire.requestFrom(_address, sizeof(data));
-  int i = 0;
-  while (Wire.available() && i < sizeof(data) - 1)
-  {
-    char c = Wire.read();
-    data[i] = c;
-    i++;
-  }
-  data[i] = '\0';
+  Wire.requestFrom(_address, 32, 1);
+  code = Wire.read();
 
-  if (i > 0)
-  {
-    char *token = strtok(data, ",");
-    if (token)
-    {
-      strncpy(EC_str, token, sizeof(EC_str) - 1);
-      EC_str[sizeof(EC_str) - 1] = '\0';
-      token = strtok(NULL, ",");
-    }
-    if (token)
-    {
-      strncpy(TDS_str, token, sizeof(TDS_str) - 1);
-      TDS_str[sizeof(TDS_str) - 1] = '\0';
-      token = strtok(NULL, ",");
-    }
-    if (token)
-    {
-      strncpy(SAL_str, token, sizeof(SAL_str) - 1);
-      SAL_str[sizeof(SAL_str) - 1] = '\0';
-      token = strtok(NULL, ",");
-    }
-    if (token)
-    {
-      strncpy(SG_str, token, sizeof(SG_str) - 1);
-      SG_str[sizeof(SG_str) - 1] = '\0';
-    }
-
-    _TDS = TDS_str;
-    return _TDS;
+  switch (code)
+  {                   // switch case based on what the response code is.
+  case 1:             // decimal 1.
+    Serial.print(""); // means the command was successful.
+    break;            // exits the switch case.
   }
+
+  while (Wire.available())
+  {                        // are there bytes to receive.
+    in_char = Wire.read(); // receive a byte.
+    ec_data[i] = in_char;  // load this byte into our array.
+    i += 1;                // incur the counter for the array element.
+    if (in_char == 0)
+    {        // if we see that we have been sent a null command.
+      i = 0; // reset the counter i to 0.
+      break; // exit the while loop.
+    }
+  }
+  tds = strtok(NULL, ","); // let's pars the string at each comma.
+  _TDS = atof(tds);
+  return _TDS;
 }
 
-String SensorsNAS::getSAL()
+float SensorsNAS::getSAL()
 {
-  char data[32];
-  char EC_str[10], TDS_str[10], SAL_str[10], SG_str[10];
+  byte code = 0;
+  char ec_data[32]; // we make a 32 byte character array to hold incoming data from the EC circuit.
+  byte in_char = 0;
+  byte i = 0;
+  byte serial_event = 0;
+  char *sal;
 
   Wire.beginTransmission(_address);
   Wire.write("R");
@@ -762,52 +754,40 @@ String SensorsNAS::getSAL()
   {
   }
 
-  Wire.requestFrom(_address, sizeof(data));
-  int i = 0;
-  while (Wire.available() && i < sizeof(data) - 1)
-  {
-    char c = Wire.read();
-    data[i] = c;
-    i++;
-  }
-  data[i] = '\0';
+  Wire.requestFrom(_address, 32, 1);
+  code = Wire.read();
 
-  if (i > 0)
-  {
-    char *token = strtok(data, ",");
-    if (token)
-    {
-      strncpy(EC_str, token, sizeof(EC_str) - 1);
-      EC_str[sizeof(EC_str) - 1] = '\0';
-      token = strtok(NULL, ",");
-    }
-    if (token)
-    {
-      strncpy(TDS_str, token, sizeof(TDS_str) - 1);
-      TDS_str[sizeof(TDS_str) - 1] = '\0';
-      token = strtok(NULL, ",");
-    }
-    if (token)
-    {
-      strncpy(SAL_str, token, sizeof(SAL_str) - 1);
-      SAL_str[sizeof(SAL_str) - 1] = '\0';
-      token = strtok(NULL, ",");
-    }
-    if (token)
-    {
-      strncpy(SG_str, token, sizeof(SG_str) - 1);
-      SG_str[sizeof(SG_str) - 1] = '\0';
-    }
-
-    _SAL = SAL_str;
-    return _SAL;
+  switch (code)
+  {                   // switch case based on what the response code is.
+  case 1:             // decimal 1.
+    Serial.print(""); // means the command was successful.
+    break;            // exits the switch case.
   }
+
+  while (Wire.available())
+  {                        // are there bytes to receive.
+    in_char = Wire.read(); // receive a byte.
+    ec_data[i] = in_char;  // load this byte into our array.
+    i += 1;                // incur the counter for the array element.
+    if (in_char == 0)
+    {        // if we see that we have been sent a null command.
+      i = 0; // reset the counter i to 0.
+      break; // exit the while loop.
+    }
+  }
+  sal = strtok(NULL, ","); // let's pars the string at each comma.
+  _SAL = atof(sal);
+  return _SAL;
 }
 
-String SensorsNAS::getSG()
+float SensorsNAS::getSG()
 {
-  char data[32];
-  char EC_str[10], TDS_str[10], SAL_str[10], SG_str[10];
+  byte code = 0;
+  char ec_data[32]; // we make a 32 byte character array to hold incoming data from the EC circuit.
+  byte in_char = 0;
+  byte i = 0;
+  byte serial_event = 0;
+  char *sg;
 
   Wire.beginTransmission(_address);
   Wire.write("R");
@@ -818,46 +798,30 @@ String SensorsNAS::getSG()
   {
   }
 
-  Wire.requestFrom(_address, sizeof(data));
-  int i = 0;
-  while (Wire.available() && i < sizeof(data) - 1)
-  {
-    char c = Wire.read();
-    data[i] = c;
-    i++;
-  }
-  data[i] = '\0';
+  Wire.requestFrom(_address, 32, 1);
+  code = Wire.read();
 
-  if (i > 0)
-  {
-    char *token = strtok(data, ",");
-    if (token)
-    {
-      strncpy(EC_str, token, sizeof(EC_str) - 1);
-      EC_str[sizeof(EC_str) - 1] = '\0';
-      token = strtok(NULL, ",");
-    }
-    if (token)
-    {
-      strncpy(TDS_str, token, sizeof(TDS_str) - 1);
-      TDS_str[sizeof(TDS_str) - 1] = '\0';
-      token = strtok(NULL, ",");
-    }
-    if (token)
-    {
-      strncpy(SAL_str, token, sizeof(SAL_str) - 1);
-      SAL_str[sizeof(SAL_str) - 1] = '\0';
-      token = strtok(NULL, ",");
-    }
-    if (token)
-    {
-      strncpy(SG_str, token, sizeof(SG_str) - 1);
-      SG_str[sizeof(SG_str) - 1] = '\0';
-    }
-
-    _SG = SG_str;
-    return _SG;
+  switch (code)
+  {                   // switch case based on what the response code is.
+  case 1:             // decimal 1.
+    Serial.print(""); // means the command was successful.
+    break;            // exits the switch case.
   }
+
+  while (Wire.available())
+  {                        // are there bytes to receive.
+    in_char = Wire.read(); // receive a byte.
+    ec_data[i] = in_char;  // load this byte into our array.
+    i += 1;                // incur the counter for the array element.
+    if (in_char == 0)
+    {        // if we see that we have been sent a null command.
+      i = 0; // reset the counter i to 0.
+      break; // exit the while loop.
+    }
+  }
+  sg = strtok(NULL, ","); // let's pars the string at each comma.
+  _SG = atof(sg);
+  return _SG;
 }
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
