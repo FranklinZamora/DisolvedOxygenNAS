@@ -27,30 +27,12 @@ To use this library in your project, you should:
 ```c++
 #include <OxygenNAS.h>
 ```
-3. Create an instance of the `OxygenNAS` class, specifying your sensor's I2C address.
-```c++
-OxygenNAS sensor(97); // replace 97 with your sensor's I2C address
-```
-4. Use the `update`, `getDO`, `getSaturacionOxigeno`, `sleep`, `find`, and `ledControl` methods to interact with the sensor.
-
-The `ledControlNAS()` method is a function in the `OxygenNAS` library that takes a boolean as an argument. It sends a command over I2C to control the state of the sensor's built-in LED. If true is passed to this method, the LED will turn on. If false is passed, the LED will turn off. 
+2. Use the generate array method to generate an xbee frame.
 
 ```c++
-sensor.ledControlNAS(false); // Turn off the LED
-sensor.ledControlNAS(true); // Turn on the LED
+    byte MacID[8] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+    ECsensor.generateArray(MacID, DOsensor, PHsensor, ECsensor);
 ```
-
-The  `void find()` method scans the I2C bus and prints out the addresses of all devices found. It can be useful for diagnosing connection issues. If a device is present on the bus and functioning correctly, its address will be displayed when this method is called. If the device's address is not displayed, this may indicate a problem with the device or its connection. After scanning, the method will delay for 5 seconds to give the user time to read the displayed addresses before the program continues. This method should be called in the `setup()` 
-
-```c++
-void setup()
-{
-  Serial.begin(9600);
-  sensor.find(); // scans the I2C bus and prints out addresses of all found devices
-}
-```
-
-Remember, this method does not stop the program from proceeding if no devices are found on the bus. After the 5-second delay, the program will continue with its usual operation.
 
 ## Note
 
