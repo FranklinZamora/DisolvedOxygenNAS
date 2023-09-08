@@ -6,6 +6,7 @@ SensorsNAS::SensorsNAS(int address)
 {
   _address = address;
   Wire.begin();
+  Serial2.begin(9600);
 }
 
 float SensorsNAS::getDO()
@@ -978,101 +979,162 @@ String SensorsNAS::deviceStatus()
   return response;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-byte SensorsNAS::generateArray()
+float SensorsNAS::getORP()
 {
-  SensorsNAS DOsensor(97);
-  SensorsNAS PHsensor(99);
-  SensorsNAS ECsensor(100);
+  UINT32_t ERC, UNSIG;
 
-  String EC, TDS, SAL, SG, PH, DO, SAT;
+  randomSeed(analogRead(A0));
+  int virtualERC = (random(-1019.9, 1019.9)) * 100;
 
-  EC = ECsensor.getEC();
-  TDS = ECsensor.getTDS();
-  SAL = ECsensor.getSAL();
-  SG = ECsensor.getSG();
-  PH = PHsensor.getPH();
-  DO = DOsensor.getDO();
-  SAT = DOsensor.getSAT();
+  Serial.print("Valor generado aleatoriamente: ");
+  Serial.println(virtualERC);
 
-  String sensado = "H/" + EC + "/" + TDS + "/" + SAL + "/" + SG + "/" + PH + "/" + DO + "/" + SAT + "/";
-  // String sensado = "AA";
-  byte additionalBytes[] = {0x7E};
-  byte fillerBytes[] = {0x10, 0x00, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xFF, 0xFE, 0x00, 0x00};
-
-  int originalLength = sensado.length();
-  byte array[originalLength];
-  // Convertir cada caracter a su valor en hexadecimal
-  for (int i = 0; i < originalLength; i++)
+  if (virtualERC < 0)
   {
-    if (sensado.charAt(i) == '.')
-    { // Agregar el valor del punto decimal como 0x2E
-      array[i] = 0x2E;
-    }
-    else
+    virtualERC = virtualERC * -1;
+    UNSIG.bytes[0] = 0x00;
+    ERC.value = virtualERC;
+  }
+  else
+  {
+    UNSIG.bytes[0] = 0x01;
+    ERC.value = virtualERC;
+  }
+  Serial.print("Valor generado *-1: ");
+  Serial.println(virtualERC);
+
+  Serial.print(UNSIG.bytes[0]);
+  Serial.print(" ");
+  Serial.print(ERC.bytes[2], HEX);
+  Serial.print(" ");
+  Serial.print(ERC.bytes[1], HEX);
+  Serial.print(" ");
+  Serial.print(ERC.bytes[0], HEX);
+  Serial.print(" ");
+  Serial.println();
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+byte SensorsNAS::generateArray(byte MacID[8], SensorsNAS &sensorDO, SensorsNAS &sensorPH, SensorsNAS &sensorEC)
+{
+
+  UINT32_t EC, TDS, ERC, UNSIG;
+  UINT16_t DisolvedOx, SaturationOx, Ph, SAL;
+  UINT8_t SG;
+
+  randomSeed(analogRead(A0));
+  int virtualERC = (random(-1019.9, 1019.9)) * 100;
+
+  DisolvedOx.value = sensorDO.getDO() * 100;
+  SaturationOx.value = sensorDO.getSAT() * 100;
+  EC.value = sensorEC.getEC() * 100;
+  TDS.value = sensorEC.getTDS() * 100;
+  SAL.value = sensorEC.getSAL() * 100;
+  SG.value = sensorEC.getSG() * 100;
+  Ph.value = sensorPH.getPH() * 100;
+
+  if (virtualERC < 0)
+  {
+    virtualERC = virtualERC * -1;
+    UNSIG.bytes[0] = 0x00;
+    ERC.value = virtualERC;
+  }
+  else
+  {
+    UNSIG.bytes[0] = 0x01;
+    ERC.value = virtualERC;
+  }
+
+  byte arrayBytes[40];
+
+  arrayBytes[0] = 0x7E;     // Start
+  arrayBytes[1] = 0x00;     // length 1
+  arrayBytes[2] = 0x24;     // Length 2
+  arrayBytes[3] = 0x10;     // Frametype
+  arrayBytes[4] = 0x00;     // Frame ID
+  arrayBytes[5] = MacID[0]; // Start Mac ID
+  arrayBytes[6] = MacID[1];
+  arrayBytes[7] = MacID[2];
+  arrayBytes[8] = MacID[3];
+  arrayBytes[9] = MacID[4];
+  arrayBytes[10] = MacID[5];
+  arrayBytes[11] = MacID[6];
+  arrayBytes[12] = MacID[7]; // End Mac ID
+  arrayBytes[13] = 0xFF;     // 8bit Add
+  arrayBytes[14] = 0xFE;     // 8bit ADD
+  arrayBytes[15] = 0x00;     // Broadcast radio
+  arrayBytes[16] = 0x00;     // Option
+
+  arrayBytes[17] = 0x48; // Payload Start
+
+  arrayBytes[18] = DisolvedOx.bytes[1];
+  arrayBytes[19] = DisolvedOx.bytes[0];
+
+  arrayBytes[20] = SaturationOx.bytes[1];
+  arrayBytes[21] = SaturationOx.bytes[0];
+
+  arrayBytes[22] = Ph.bytes[1];
+  arrayBytes[23] = Ph.bytes[0];
+
+  arrayBytes[24] = EC.bytes[3];
+  arrayBytes[25] = EC.bytes[2];
+  arrayBytes[26] = EC.bytes[1];
+  arrayBytes[27] = EC.bytes[0];
+
+  arrayBytes[28] = TDS.bytes[3];
+  arrayBytes[29] = TDS.bytes[2];
+  arrayBytes[30] = TDS.bytes[1];
+  arrayBytes[31] = TDS.bytes[0];
+
+  arrayBytes[32] = SAL.bytes[1];
+  arrayBytes[33] = SAL.bytes[0];
+
+  arrayBytes[34] = SG.bytes[0]; // End payload
+  arrayBytes[35] = UNSIG.bytes[0];
+  arrayBytes[36] = ERC.bytes[2];
+  arrayBytes[37] = ERC.bytes[1];
+  arrayBytes[38] = ERC.bytes[0];
+
+  uint16_t checksum = 0;
+
+  // Calcular la suma de los bytes
+  for (int i = 3; i <= 38; i++)
+  {
+    checksum += arrayBytes[i];
+    // Serial.print(checksum, HEX);
+    // Serial.print(" ");
+  }
+  // Serial.println();
+
+  // Serial.println(checksum, HEX);
+
+  // Tomar los 8 bits menos significativos de la suma
+  checksum = checksum & 0xFF;
+
+  // Calcular el complemento a dos
+  checksum = (0xFF - checksum);
+
+  arrayBytes[39] = checksum;
+
+  // Serial.println(checksum, HEX);
+
+  for (int i = 0; i < sizeof(arrayBytes); i++)
+  {
+    if (arrayBytes[i] < 0x10)
     {
-      array[i] = sensado.charAt(i) - '0'; // Restar el valor ASCII de '0' para obtener el valor en decimal
-      array[i] += 0x30;                   // Sumar 0x30 para obtener el valor en hexadecimal correspondiente
+      Serial.print("0"); // Agregar un 0 en caso necesario para el formato
     }
-  }
+    Serial.print(arrayBytes[i], HEX);
+    Serial2.write(arrayBytes[i]);
 
-  int additionalLength = sizeof(additionalBytes);
-  int fillerLength = sizeof(fillerBytes);
-  int totalSize = originalLength + fillerLength;
-  byte lengthBytes[] =
-      {
-          (byte)(totalSize >> 8),
-          (byte)(totalSize)};
-
-  byte concatenatedArray[additionalLength + 2 + totalSize + 1]; // 2 bytes for total size, 1 byte for checksum
-
-  int resultIndex = 0;
-
-  // Add additional bytes
-  for (int i = 0; i < additionalLength; i++)
-  {
-    concatenatedArray[resultIndex++] = additionalBytes[i];
-  }
-
-  // Add total size bytes
-  concatenatedArray[resultIndex++] = lengthBytes[0];
-  concatenatedArray[resultIndex++] = lengthBytes[1];
-
-  // Add filler bytes
-  for (int i = 0; i < fillerLength; i++)
-  {
-    concatenatedArray[resultIndex++] = fillerBytes[i];
-  }
-
-  // Add array bytes
-  for (int i = 0; i < originalLength; i++)
-  {
-    concatenatedArray[resultIndex++] = array[i];
-  }
-
-  // Calculate checksum
-  byte checksum = calculateChecksum(concatenatedArray + 3, resultIndex - 3); // Exclude the first 3 bytes
-
-  // Add checksum to the end
-  concatenatedArray[resultIndex++] = checksum;
-
-  // Print the concatenated array for verification
-  for (int i = 0; i < resultIndex; i++)
-  {
-    Serial.print(concatenatedArray[i], HEX);
     Serial.print(" ");
+    // Serial2.write(arrayBytes[i], HEX);
   }
 
   Serial.println();
-  Serial.println(sensado);
-}
+  sensorDO.sleepNAS();
+  sensorEC.sleepNAS();
+  sensorPH.sleepNAS();
 
-byte SensorsNAS::calculateChecksum(byte *data, int length)
-{
-  byte checksum = 0;
-  for (int i = 0; i < length; i++)
-  {
-    checksum += data[i];
-  }
-  return 0xFF - checksum;
+  // Serial.println("***********************************");
 }

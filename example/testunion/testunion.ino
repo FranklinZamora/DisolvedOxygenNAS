@@ -22,10 +22,9 @@ typedef union
     uint8_t bytes[4];
 } UINT32_t;
 
-
 void setup()
 {
-    Serial.begin(115200);
+    Serial.begin(9600);
 }
 
 void loop()
@@ -42,17 +41,18 @@ void loop()
     SAL.value = sensorEC.getSAL() * 100;
     SG.value = sensorEC.getSG() * 100;
 
-    uint16_t arrayBytes[35];
+    uint16_t arrayBytes[35] = {0x7E, 0x00, 0x20, 0x10, 0x00};
+    /*
     arrayBytes[0] = 0x7E; // Start
     arrayBytes[1] = 0x00; // length 1
     arrayBytes[2] = 0x20; // Length 2
     arrayBytes[3] = 0x10; // Frametype
-    arrayBytes[4] = 0x00; // Frame ID  
-
+    arrayBytes[4] = 0x00; // Frame ID
+    */
     arrayBytes[13] = 0xFF; // 8bit Add
-    arrayBytes[14] = 0xFE; // 8bit ADD 
+    arrayBytes[14] = 0xFE; // 8bit ADD
     arrayBytes[15] = 0x00; // Broadcast radio
-    arrayBytes[16] = 0x00; // Option  
+    arrayBytes[16] = 0x00; // Option
 
     arrayBytes[17] = 0x48; // Payload Start
 
@@ -78,26 +78,25 @@ void loop()
     arrayBytes[32] = SAL.bytes[1];
     arrayBytes[33] = SAL.bytes[0];
 
-    arrayBytes[34] = SG.bytes[0];
-
+    arrayBytes[34] = SG.bytes[0]; // Cksm
 
     Serial.println("-------------");
-    Serial.print(arrayBytes[0], HEX); 
+    Serial.print(arrayBytes[0], HEX);
     Serial.print(" ");
     Serial.print(arrayBytes[1], HEX);
     Serial.print(" ");
 
-    Serial.print(arrayBytes[2], HEX); 
+    Serial.print(arrayBytes[2], HEX);
     Serial.print(" ");
     Serial.print(arrayBytes[3], HEX);
     Serial.print(" ");
 
-    Serial.print(arrayBytes[4], HEX); 
+    Serial.print(arrayBytes[4], HEX);
     Serial.print(" ");
     Serial.print(arrayBytes[5], HEX);
     Serial.print(" ");
 
-    Serial.print(arrayBytes[6], HEX); 
+    Serial.print(arrayBytes[6], HEX);
     Serial.print(" ");
     Serial.print(arrayBytes[7], HEX);
     Serial.print(" ");
@@ -115,7 +114,7 @@ void loop()
     Serial.print(arrayBytes[13], HEX);
     Serial.print(" ");
 
-    Serial.print(arrayBytes[14], HEX); 
+    Serial.print(arrayBytes[14], HEX);
     Serial.print(" ");
     Serial.print(arrayBytes[15], HEX);
     Serial.print(" ");
@@ -123,25 +122,25 @@ void loop()
     Serial.print(arrayBytes[16], HEX);
     Serial.print(" ");
 
-    Serial.print(arrayBytes[17], HEX); 
+    Serial.print(arrayBytes[17], HEX);
     Serial.print(" ");
 
-    Serial.print(arrayBytes[18], HEX); //PL
+    Serial.print(arrayBytes[18], HEX); // PL
     Serial.print(" ");
     Serial.print(arrayBytes[19], HEX);
     Serial.print(" ");
 
-    Serial.print(arrayBytes[20], HEX); 
+    Serial.print(arrayBytes[20], HEX);
     Serial.print(" ");
     Serial.print(arrayBytes[21], HEX);
     Serial.print(" ");
 
-    Serial.print(arrayBytes[22], HEX); 
+    Serial.print(arrayBytes[22], HEX);
     Serial.print(" ");
     Serial.print(arrayBytes[23], HEX);
     Serial.print(" ");
 
-    Serial.print(arrayBytes[24], HEX); 
+    Serial.print(arrayBytes[24], HEX);
     Serial.print(" ");
     Serial.print(arrayBytes[25], HEX);
     Serial.print(" ");
@@ -159,18 +158,17 @@ void loop()
     Serial.print(arrayBytes[31], HEX);
     Serial.print(" ");
 
-    Serial.print(arrayBytes[32], HEX); 
+    Serial.print(arrayBytes[32], HEX);
     Serial.print(" ");
     Serial.print(arrayBytes[33], HEX);
     Serial.print(" ");
 
-    Serial.print(arrayBytes[34], HEX); 
+    Serial.print(arrayBytes[34], HEX);
     Serial.print(" ");
 
-    Serial.print(arrayBytes[35], HEX); //CKSM
+    Serial.print(arrayBytes[35], HEX); // CKSM
     Serial.print(" ");
 
     Serial.println();
     Serial.println("-------------");
-
 }
