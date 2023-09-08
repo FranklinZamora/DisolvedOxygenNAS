@@ -26,7 +26,13 @@ To use this library in your project, you should:
 ```c++
 #include <OxygenNAS.h>
 ```
-2. Use the generate array method to generate an xbee frame.
+3. Instantiate the sensors in a class with these addresses:
+```c++
+SensorsNAS DOsensor(97);
+SensorsNAS PHsensor(99);
+SensorsNAS ECsensor(100);
+```
+4. Use the generate array method to generate an xbee frame.
 
 ```c++
     byte MacID[8] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
