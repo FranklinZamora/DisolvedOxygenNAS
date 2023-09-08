@@ -8,7 +8,7 @@
 
 ## Description
 
-This repository contains a custom Arduino library and corresponding sketch for interfacing with a Dissolved Oxygen (DO) sensor via I2C. The `OxygenNAS` library, designed specifically for Ochoa Technology, simplifies reading dissolved oxygen and oxygen saturation values from the sensor, as well as controlling the sensor's low-power mode and LED state.
+This repository contains a custom Arduino library and corresponding sketch for interfacing with a different sensors via I2C. The `SensorNAS` library, designed specifically for Ochoa Technology, simplifies reading O2, SAT, EC, TDS, SAL, SG and PH values from the sensor, as well as controlling the sensor's low-power mode and LED state.
 
 ## Features
 
@@ -16,7 +16,6 @@ This repository contains a custom Arduino library and corresponding sketch for i
 - Capability to put the sensor into a low-power ("sleep") mode.
 - Functionality to control the sensor's built-in LED.
 - The provided example sketch allows user interaction via the serial monitor to control the sleep mode and LED state of the sensor.
-- Find sensor addres
 
 ## Usage
 
