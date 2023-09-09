@@ -24,7 +24,7 @@ To use this library in your project, you should:
 1. Clone this repository.
 2. Include the `OxygenNAS.h` header file in your Arduino sketch.
 ```c++
-#include <OxygenNAS.h>
+#include <SensorsNAS.h>
 ```
 3. Instantiate the sensors in a class with these addresses:
 ```c++
