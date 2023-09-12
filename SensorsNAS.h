@@ -19,7 +19,7 @@ public:
   float getTempCompensationDO();
   float getSalCompensationDO();
   float getAtmosphericPressureCompensation();
-  byte generateArray(byte MacID[8], SensorsNAS &sensorDO, SensorsNAS &sensorPH, SensorsNAS &sensorEC);
+  byte generateArray(byte MacID[8], SensorsNAS &sensorDO, SensorsNAS &sensorPH, SensorsNAS &sensorEC, SensorsNAS &sensorORP);
   void sleepNAS();
   void ledControlNAS(bool state);
   void enableMgO2();

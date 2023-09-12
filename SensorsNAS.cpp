@@ -981,44 +981,52 @@ String SensorsNAS::deviceStatus()
 
 float SensorsNAS::getORP()
 {
-  UINT32_t ERC, UNSIG;
+  byte code = 0;
+  char ORP_data[32];
+  byte in_char = 0;
+  byte i = 0;
+  byte serial_event = 0;
 
-  randomSeed(analogRead(A0));
-  int virtualERC = (random(-1019.9, 1019.9)) * 100;
+  Wire.beginTransmission(_address);
+  Wire.write("R");
+  Wire.endTransmission();
 
-  Serial.print("Valor generado aleatoriamente: ");
-  Serial.println(virtualERC);
-
-  if (virtualERC < 0)
+  unsigned long startTime = millis();
+  while (millis() - startTime < 900)
   {
-    virtualERC = virtualERC * -1;
-    UNSIG.bytes[0] = 0x00;
-    ERC.value = virtualERC;
   }
-  else
-  {
-    UNSIG.bytes[0] = 0x01;
-    ERC.value = virtualERC;
-  }
-  Serial.print("Valor generado *-1: ");
-  Serial.println(virtualERC);
 
-  Serial.print(UNSIG.bytes[0]);
-  Serial.print(" ");
-  Serial.print(ERC.bytes[2], HEX);
-  Serial.print(" ");
-  Serial.print(ERC.bytes[1], HEX);
-  Serial.print(" ");
-  Serial.print(ERC.bytes[0], HEX);
-  Serial.print(" ");
-  Serial.println();
+  Wire.requestFrom(_address, 32, 1);
+  code = Wire.read();
+
+  switch (code)
+  {
+  case 1:
+    Serial.print("");
+    break;
+  }
+
+  while (Wire.available())
+  {                        // are there bytes to receive.
+    in_char = Wire.read(); // receive a byte.
+    ORP_data[i] = in_char; // load this byte into our array.
+    i += 1;                // incur the counter for the array element.
+    if (in_char == 0)
+    {        // if we see that we have been sent a null command.
+      i = 0; // reset the counter i to 0.
+      break; // exit the while loop.
+    }
+  }
+
+  _ORP = atof(ORP_data);
+  return _ORP;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-byte SensorsNAS::generateArray(byte MacID[8], SensorsNAS &sensorDO, SensorsNAS &sensorPH, SensorsNAS &sensorEC)
+byte SensorsNAS::generateArray(byte MacID[8], SensorsNAS &sensorDO, SensorsNAS &sensorPH, SensorsNAS &sensorEC, SensorsNAS &sensorORP)
 {
 
-  UINT32_t EC, TDS, ERC, UNSIG;
+  UINT32_t EC, TDS, ORP, UNSIG;
   UINT16_t DisolvedOx, SaturationOx, Ph, SAL;
   UINT8_t SG;
 
@@ -1032,17 +1040,16 @@ byte SensorsNAS::generateArray(byte MacID[8], SensorsNAS &sensorDO, SensorsNAS &
   SAL.value = sensorEC.getSAL() * 100;
   SG.value = sensorEC.getSG() * 100;
   Ph.value = sensorPH.getPH() * 100;
+  ORP.value = sensorORP.getORP() * 100;
 
-  if (virtualERC < 0)
+  if (ORP.value < 0)
   {
-    virtualERC = virtualERC * -1;
+    ORP.value = ORP.value * -1;
     UNSIG.bytes[0] = 0x00;
-    ERC.value = virtualERC;
   }
   else
   {
     UNSIG.bytes[0] = 0x01;
-    ERC.value = virtualERC;
   }
 
   byte arrayBytes[40];
@@ -1091,9 +1098,9 @@ byte SensorsNAS::generateArray(byte MacID[8], SensorsNAS &sensorDO, SensorsNAS &
 
   arrayBytes[34] = SG.bytes[0]; // End payload
   arrayBytes[35] = UNSIG.bytes[0];
-  arrayBytes[36] = ERC.bytes[2];
-  arrayBytes[37] = ERC.bytes[1];
-  arrayBytes[38] = ERC.bytes[0];
+  arrayBytes[36] = ORP.bytes[2];
+  arrayBytes[37] = ORP.bytes[1];
+  arrayBytes[38] = ORP.bytes[0];
 
   uint16_t checksum = 0;
 
