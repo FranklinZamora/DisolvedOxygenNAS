@@ -1142,6 +1142,7 @@ byte SensorsNAS::generateArray(byte MacID[8], SensorsNAS &sensorDO, SensorsNAS &
   sensorDO.sleepNAS();
   sensorEC.sleepNAS();
   sensorPH.sleepNAS();
+  sensorORP.sleepNAS();
 
   // Serial.println("***********************************");
 }
