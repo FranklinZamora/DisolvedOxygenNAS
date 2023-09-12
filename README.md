@@ -8,7 +8,7 @@
 
 ## Description
 
-This repository contains a custom Arduino library and corresponding sketch for interfacing with a different sensors via I2C. The `SensorNAS` library, designed specifically for Ochoa Technology, simplifies reading O2, SAT, EC, TDS, SAL, SG and PH values from the sensor, as well as controlling the sensor's low-power mode and LED state.
+This repository contains a custom Arduino library and corresponding sketch for interfacing with a different sensors via I2C. The `SensorNAS` library, designed specifically for Ochoa Technology, simplifies reading O2, SAT, EC, TDS, SAL, SG, ORP and PH values from the sensor, as well as controlling the sensor's low-power mode and LED state.
 
 ## Features
 
