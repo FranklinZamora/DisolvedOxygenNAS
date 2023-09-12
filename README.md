@@ -36,7 +36,7 @@ SensorsNAS ECsensor(100);
 
 ```c++
     byte MacID[8] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
-    ECsensor.generateArray(MacID, DOsensor, PHsensor, ECsensor);
+    ECsensor.generateArray(MacID, DOsensor, PHsensor, ECsensor, ORPsensor);
 ```
 
 ## Note
