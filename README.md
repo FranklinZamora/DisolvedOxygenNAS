@@ -28,15 +28,19 @@ To use this library in your project, you should:
 ```
 3. Instantiate the sensors in a class with these addresses:
 ```c++
-SensorsNAS DOsensor(97);
-SensorsNAS PHsensor(99);
-SensorsNAS ECsensor(100);
+#define O2 97
+#define PH 98
+#define EC 99
+#define ORP 100
+
+SensorsNAS sensors(O2, PH, EC, ORP);
+
 ```
 4. Use the generate array method to generate an xbee frame.
 
 ```c++
-    byte MacID[8] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
-    ECsensor.generateArray(MacID, DOsensor, PHsensor, ECsensor, ORPsensor);
+    byte MacID[8] = {0x00, 0x13, 0xA2, 0x00, 0x41, 0xEA, 0x56, 0x3F};
+    sensors.generateArray(MacID, sensors);
 ```
 
 ## Note
