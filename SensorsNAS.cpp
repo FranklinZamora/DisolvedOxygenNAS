@@ -2,9 +2,13 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-SensorsNAS::SensorsNAS(int address)
+SensorsNAS::SensorsNAS(int add_DO, int add_PH, int add_EC, int add_ORP)
 {
-  _address = address;
+  _address1 = add_DO;
+  _address2 = add_PH;
+  _address3 = add_EC;
+  _address4 = add_ORP;
+
   Wire.begin();
   Serial2.begin(9600);
 }
@@ -15,7 +19,7 @@ float SensorsNAS::getDO()
   int i = 0;
 
   // Send command to read DO data to sensor
-  Wire.beginTransmission(_address);
+  Wire.beginTransmission(_address1);
   Wire.write("R");
   Wire.endTransmission();
 
@@ -26,7 +30,7 @@ float SensorsNAS::getDO()
   }
 
   // Request data from sensor
-  Wire.requestFrom(_address, 48, 1);
+  Wire.requestFrom(_address1, 48, 1);
 
   while (Wire.available())
   {
@@ -66,7 +70,7 @@ float SensorsNAS::getSAT()
   int i = 0;
 
   // Send command to read DO data to sensor
-  Wire.beginTransmission(_address);
+  Wire.beginTransmission(_address1);
   Wire.write("R");
   Wire.endTransmission();
 
@@ -114,7 +118,7 @@ float SensorsNAS::getSAT()
 void SensorsNAS::calibrateDO(String calibrationValue)
 {
   String command = "CAL," + calibrationValue;
-  Wire.beginTransmission(_address);
+  Wire.beginTransmission(_address1);
   Wire.write(command.c_str());
   Wire.endTransmission();
   Serial.println("Calibration command sent.");
@@ -127,7 +131,7 @@ void SensorsNAS::calibrateDO(String calibrationValue)
 
   // Request data from sensor
   byte response;
-  Wire.requestFrom(_address, 1);
+  Wire.requestFrom(_address1, 1);
 
   unsigned long startTime2 = millis();
   while (millis() - startTime2 < 100)
@@ -160,7 +164,7 @@ void SensorsNAS::calibrateDO(String calibrationValue)
 void SensorsNAS::clearCalibrationDO()
 {
   String command = "CAL,CLEAR";
-  Wire.beginTransmission(_address);
+  Wire.beginTransmission(_address1);
   Wire.write(command.c_str());
   Wire.endTransmission();
 
@@ -172,7 +176,7 @@ void SensorsNAS::clearCalibrationDO()
 
   // Request data from sensor
   byte response;
-  Wire.requestFrom(_address, 1);
+  Wire.requestFrom(_address1, 1);
   if (Wire.available())
   {
     response = Wire.read();
@@ -195,7 +199,7 @@ void SensorsNAS::clearCalibrationDO()
 String SensorsNAS::exportCalibrationDO()
 {
   String command = "Export";
-  Wire.beginTransmission(_address);
+  Wire.beginTransmission(_address1);
   Wire.write(command.c_str());
   Wire.endTransmission();
 
@@ -206,7 +210,7 @@ String SensorsNAS::exportCalibrationDO()
   }
 
   // Request data from sensor
-  Wire.requestFrom(_address, 32, 1);
+  Wire.requestFrom(_address1, 32, 1);
 
   byte code = 0;
 
@@ -256,7 +260,7 @@ bool SensorsNAS::importCalibrationDO(String calibrationData)
   String command = "IMPORT,";
   command += calibrationData;
 
-  Wire.beginTransmission(_address);
+  Wire.beginTransmission(_address1);
   Wire.write(command.c_str());
   Wire.endTransmission();
 
@@ -293,7 +297,7 @@ bool SensorsNAS::setTempCompensationDO(float temperature)
   String command = "T,";
   command += String(temperature, 1); // Convert value to string
 
-  Wire.beginTransmission(_address);
+  Wire.beginTransmission(_address1);
   Wire.write(command.c_str());
   Wire.endTransmission();
 
@@ -306,7 +310,7 @@ bool SensorsNAS::setTempCompensationDO(float temperature)
 
   // Request data from sensor
   byte response[20];
-  Wire.requestFrom(_address, 20);
+  Wire.requestFrom(_address1, 20);
   if (Wire.available())
   {
     byte i = 0;
@@ -327,7 +331,7 @@ bool SensorsNAS::setTempCompensationDO(float temperature)
 float SensorsNAS::getTempCompensationDO()
 {
   String command = "T,?";
-  Wire.beginTransmission(_address);
+  Wire.beginTransmission(_address1);
   Wire.write(command.c_str());
   Wire.endTransmission();
 
@@ -339,7 +343,7 @@ float SensorsNAS::getTempCompensationDO()
   }
 
   // Request data from sensor
-  Wire.requestFrom(_address, 20);
+  Wire.requestFrom(_address1, 20);
   String response = "";
   while (Wire.available())
   {
@@ -364,7 +368,7 @@ bool SensorsNAS::setSalCompensationDO(float saladditionalBytesy)
   String command = "S,";
   command += String(saladditionalBytesy, 1);
 
-  Wire.beginTransmission(_address);
+  Wire.beginTransmission(_address1);
   Wire.write(command.c_str());
   Wire.endTransmission();
 
@@ -398,7 +402,7 @@ bool SensorsNAS::setSalCompensationDO(float saladditionalBytesy)
 float SensorsNAS::getSalCompensationDO()
 {
   String command = "S,?";
-  Wire.beginTransmission(_address);
+  Wire.beginTransmission(_address1);
   Wire.write(command.c_str());
   Wire.endTransmission();
 
@@ -409,7 +413,7 @@ float SensorsNAS::getSalCompensationDO()
     // Wait
   }
   // Request data from sensor
-  Wire.requestFrom(_address, 20);
+  Wire.requestFrom(_address1, 20);
   String response = "";
   while (Wire.available())
   {
@@ -433,7 +437,7 @@ bool SensorsNAS::setAtmosphericPressureCompensation(float atPressure)
   String command = "P,";
   command += String(atPressure, 1);
 
-  Wire.beginTransmission(_address);
+  Wire.beginTransmission(_address1);
   Wire.write(command.c_str());
   Wire.endTransmission();
 
@@ -446,7 +450,7 @@ bool SensorsNAS::setAtmosphericPressureCompensation(float atPressure)
 
   // Request data from sensorr
   byte response[20];
-  Wire.requestFrom(_address, 20);
+  Wire.requestFrom(_address1, 20);
   if (Wire.available())
   {
     byte i = 0;
@@ -467,7 +471,7 @@ bool SensorsNAS::setAtmosphericPressureCompensation(float atPressure)
 float SensorsNAS::getAtmosphericPressureCompensation()
 {
   String command = "P,?";
-  Wire.beginTransmission(_address);
+  Wire.beginTransmission(_address1);
   Wire.write(command.c_str());
   Wire.endTransmission();
 
@@ -479,7 +483,7 @@ float SensorsNAS::getAtmosphericPressureCompensation()
   }
 
   // Request data from sensor
-  Wire.requestFrom(_address, 20);
+  Wire.requestFrom(_address1, 20);
   String response = "";
 
   while (Wire.available())
@@ -500,8 +504,9 @@ float SensorsNAS::getAtmosphericPressureCompensation()
   return -999.0;
 }
 
-void SensorsNAS::setName(String name)
+void SensorsNAS::setName(String name, int address)
 {
+  address = _address;
   String command = "Name," + name;
   Wire.beginTransmission(_address);
   Wire.write(command.c_str());
@@ -544,8 +549,9 @@ void SensorsNAS::setName(String name)
   }
 }
 
-String SensorsNAS::getName()
+String SensorsNAS::getName(int address)
 {
+  _address = address;
   Wire.beginTransmission(_address);
   Wire.write("name,?");
   Wire.endTransmission();
@@ -569,7 +575,7 @@ String SensorsNAS::getName()
 
 void SensorsNAS::enableMgO2()
 {
-  Wire.beginTransmission(_address);
+  Wire.beginTransmission(_address1);
   Wire.write("O,mg,1"); // Habilitar parámetros en la cadena de salida
   Wire.endTransmission();
 
@@ -582,7 +588,7 @@ void SensorsNAS::enableMgO2()
 
 void SensorsNAS::disableMgO2()
 {
-  Wire.beginTransmission(_address);
+  Wire.beginTransmission(_address1);
   Wire.write("O,mg,0"); // Habilitar parámetros en la cadena de salida
   Wire.endTransmission();
   unsigned long startTime = millis();
@@ -594,7 +600,7 @@ void SensorsNAS::disableMgO2()
 
 void SensorsNAS::enableSatO2()
 {
-  Wire.beginTransmission(_address);
+  Wire.beginTransmission(_address1);
   Wire.write("O,%,1"); // Habilitar parámetros en la cadena de salida
   Wire.endTransmission();
   unsigned long startTime = millis();
@@ -606,7 +612,7 @@ void SensorsNAS::enableSatO2()
 
 void SensorsNAS::disableSatO2()
 {
-  Wire.beginTransmission(_address);
+  Wire.beginTransmission(_address1);
   Wire.write("O,%,0"); // Habilitar parámetros en la cadena de salida
   Wire.endTransmission();
   unsigned long startTime = millis();
@@ -622,7 +628,7 @@ float SensorsNAS::getPH()
 {
   byte data[6];
 
-  Wire.beginTransmission(_address);
+  Wire.beginTransmission(_address2);
   Wire.write("R");
   Wire.endTransmission();
 
@@ -631,7 +637,7 @@ float SensorsNAS::getPH()
   {
   }
 
-  Wire.requestFrom(_address, 6, 1);
+  Wire.requestFrom(_address2, 6, 1);
   x = "";
   for (int i = 0; i <= 5; i++)
   {
@@ -658,7 +664,7 @@ float SensorsNAS::getEC()
   byte serial_event = 0;
   char *ec;
 
-  Wire.beginTransmission(_address);
+  Wire.beginTransmission(_address3);
   Wire.write("R");
   Wire.endTransmission();
 
@@ -667,7 +673,7 @@ float SensorsNAS::getEC()
   {
   }
 
-  Wire.requestFrom(_address, 32, 1);
+  Wire.requestFrom(_address3, 32, 1);
   code = Wire.read();
 
   switch (code)
@@ -702,7 +708,7 @@ float SensorsNAS::getTDS()
   byte serial_event = 0;
   char *tds;
 
-  Wire.beginTransmission(_address);
+  Wire.beginTransmission(_address3);
   Wire.write("R");
   Wire.endTransmission();
 
@@ -711,7 +717,7 @@ float SensorsNAS::getTDS()
   {
   }
 
-  Wire.requestFrom(_address, 32, 1);
+  Wire.requestFrom(_address3, 32, 1);
   code = Wire.read();
 
   switch (code)
@@ -746,7 +752,7 @@ float SensorsNAS::getSAL()
   byte serial_event = 0;
   char *sal;
 
-  Wire.beginTransmission(_address);
+  Wire.beginTransmission(_address3);
   Wire.write("R");
   Wire.endTransmission();
 
@@ -755,7 +761,7 @@ float SensorsNAS::getSAL()
   {
   }
 
-  Wire.requestFrom(_address, 32, 1);
+  Wire.requestFrom(_address3, 32, 1);
   code = Wire.read();
 
   switch (code)
@@ -790,7 +796,7 @@ float SensorsNAS::getSG()
   byte serial_event = 0;
   char *sg;
 
-  Wire.beginTransmission(_address);
+  Wire.beginTransmission(_address3);
   Wire.write("R");
   Wire.endTransmission();
 
@@ -799,7 +805,7 @@ float SensorsNAS::getSG()
   {
   }
 
-  Wire.requestFrom(_address, 32, 1);
+  Wire.requestFrom(_address3, 32, 1);
   code = Wire.read();
 
   switch (code)
@@ -826,8 +832,9 @@ float SensorsNAS::getSG()
 }
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-void SensorsNAS::sleepNAS()
+void SensorsNAS::sleepNAS(int address)
 {
+  _address = address;
   byte DO_data[48];
   int i = 0;
 
@@ -880,8 +887,9 @@ void SensorsNAS::sleepNAS()
   Wire.endTransmission();
 }
 
-void SensorsNAS::ledControlNAS(bool state)
+void SensorsNAS::ledControlNAS(bool state, int address)
 {
+  _address = address;
   Wire.beginTransmission(_address);
 
   if (state)
@@ -896,9 +904,10 @@ void SensorsNAS::ledControlNAS(bool state)
   Wire.endTransmission();
 }
 
-String SensorsNAS::find()
+String SensorsNAS::find(int address)
 {
-  byte error, address;
+  _address = address;
+  byte error;
   int nDevices;
 
   Serial.println("Scanning...");
@@ -933,8 +942,9 @@ String SensorsNAS::find()
     Serial.println("Done");
 }
 
-String SensorsNAS::deviceInformation()
+String SensorsNAS::deviceInformation(int address)
 {
+  _address = address;
   Wire.beginTransmission(_address);
   Wire.write("I");
   Wire.endTransmission();
@@ -956,8 +966,9 @@ String SensorsNAS::deviceInformation()
   return response;
 }
 
-String SensorsNAS::deviceStatus()
+String SensorsNAS::deviceStatus(int address)
 {
+  _address = address;
   Wire.beginTransmission(_address);
   Wire.write("Status");
   Wire.endTransmission();
@@ -987,7 +998,7 @@ float SensorsNAS::getORP()
   byte i = 0;
   byte serial_event = 0;
 
-  Wire.beginTransmission(_address);
+  Wire.beginTransmission(_address4);
   Wire.write("R");
   Wire.endTransmission();
 
@@ -996,7 +1007,7 @@ float SensorsNAS::getORP()
   {
   }
 
-  Wire.requestFrom(_address, 32, 1);
+  Wire.requestFrom(_address4, 32, 1);
   code = Wire.read();
 
   switch (code)
@@ -1023,24 +1034,21 @@ float SensorsNAS::getORP()
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-byte SensorsNAS::generateArray(byte MacID[8], SensorsNAS &sensorDO, SensorsNAS &sensorPH, SensorsNAS &sensorEC, SensorsNAS &sensorORP)
+byte SensorsNAS::generateArray(byte MacID[8], SensorsNAS &sensors)
 {
 
   UINT32_t EC, TDS, ORP, UNSIG;
   UINT16_t DisolvedOx, SaturationOx, Ph, SAL;
   UINT8_t SG;
 
-  randomSeed(analogRead(A0));
-  int virtualERC = (random(-1019.9, 1019.9)) * 100;
-
-  DisolvedOx.value = sensorDO.getDO() * 100;
-  SaturationOx.value = sensorDO.getSAT() * 100;
-  EC.value = sensorEC.getEC() * 100;
-  TDS.value = sensorEC.getTDS() * 100;
-  SAL.value = sensorEC.getSAL() * 100;
-  SG.value = sensorEC.getSG() * 100;
-  Ph.value = sensorPH.getPH() * 100;
-  ORP.value = sensorORP.getORP() * 100;
+  DisolvedOx.value = sensors.getDO() * 100;
+  SaturationOx.value = sensors.getSAT() * 100;
+  EC.value = sensors.getEC() * 100;
+  TDS.value = sensors.getTDS() * 100;
+  SAL.value = sensors.getSAL() * 100;
+  SG.value = sensors.getSG() * 100;
+  Ph.value = sensors.getPH() * 100;
+  ORP.value = sensors.getORP() * 100;
 
   if (ORP.value < 0)
   {
@@ -1139,10 +1147,10 @@ byte SensorsNAS::generateArray(byte MacID[8], SensorsNAS &sensorDO, SensorsNAS &
   }
 
   Serial.println();
-  sensorDO.sleepNAS();
-  sensorEC.sleepNAS();
-  sensorPH.sleepNAS();
-  sensorORP.sleepNAS();
+  sensors.sleepNAS(97);
+  sensors.sleepNAS(98);
+  sensors.sleepNAS(99);
+  sensors.sleepNAS(100);
 
   // Serial.println("***********************************");
 }

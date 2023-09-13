@@ -1,10 +1,12 @@
 #include <SensorsNAS.h>
 #include <Arduino.h>
 
-SensorsNAS DOsensor(97);
-SensorsNAS ORPsensor(98);
-SensorsNAS PHsensor(99);
-SensorsNAS ECsensor(100);
+#define O2 97
+#define PH 98
+#define EC 99
+#define ORP 100
+
+SensorsNAS sensors(O2, PH, EC, ORP);
 
 void setup()
 {
@@ -15,6 +17,6 @@ void setup()
 void loop()
 {
     byte MacID[8] = {0x00, 0x13, 0xA2, 0x00, 0x41, 0xEA, 0x56, 0x3F};
-    ORPsensor.generateArray(MacID, DOsensor, PHsensor, ECsensor, ORPsensor);
+    sensors.generateArray(MacID, sensors);
     delay(2000);
 }

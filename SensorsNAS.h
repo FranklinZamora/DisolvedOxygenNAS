@@ -7,7 +7,7 @@
 class SensorsNAS
 {
 public:
-  SensorsNAS(int address);
+  SensorsNAS(int add_DO, int add_PH, int add_EC, int add_ORP);
   float getORP();
   float getDO();
   float getSAT();
@@ -19,25 +19,25 @@ public:
   float getTempCompensationDO();
   float getSalCompensationDO();
   float getAtmosphericPressureCompensation();
-  byte generateArray(byte MacID[8], SensorsNAS &sensorDO, SensorsNAS &sensorPH, SensorsNAS &sensorEC, SensorsNAS &sensorORP);
-  void sleepNAS();
-  void ledControlNAS(bool state);
+  byte generateArray(byte MacID[8], SensorsNAS &sensors);
+  void sleepNAS(int address);
+  void ledControlNAS(bool state, int address);
   void enableMgO2();
   void disableMgO2();
   void enableSatO2();
   void disableSatO2();
   void clearCalibrationDO();
   void calibrateDO(String calibrationValue);
-  void setName(String name);
+  void setName(String name, int address);
   bool importCalibrationDO(String calibrationData);
   bool setTempCompensationDO(float temperature);
   bool setSalCompensationDO(float salinity);
   bool setAtmosphericPressureCompensation(float atPressure);
-  String find();
+  String find(int address);
   String exportCalibrationDO();
-  String getName();
-  String deviceInformation();
-  String deviceStatus();
+  String getName(int address);
+  String deviceInformation(int address);
+  String deviceStatus(int address);
 
   typedef union
   {
@@ -61,6 +61,10 @@ private:
   int time;
   String x; // Variable to save received data
   int _address;
+  int _address1;
+  int _address2;
+  int _address3;
+  int _address4;
   float _DO;
   float _saturacionOxigeno;
   float _PH;
