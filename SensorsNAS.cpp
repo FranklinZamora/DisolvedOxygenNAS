@@ -81,7 +81,7 @@ float SensorsNAS::getSAT()
   }
 
   // Request data from sensor
-  Wire.requestFrom(_address, 48, 1);
+  Wire.requestFrom(_address1, 48, 1);
 
   while (Wire.available())
   {
@@ -273,7 +273,7 @@ bool SensorsNAS::importCalibrationDO(String calibrationData)
 
   // Request data from sensor
   byte response[20];
-  Wire.requestFrom(_address, 20);
+  Wire.requestFrom(_address1, 20);
   if (Wire.available())
   {
     byte i = 0;
@@ -381,7 +381,7 @@ bool SensorsNAS::setSalCompensationDO(float saladditionalBytesy)
 
   // Request data from sensor
   byte response[20];
-  Wire.requestFrom(_address, 20);
+  Wire.requestFrom(_address1, 20);
   if (Wire.available())
   {
     byte i = 0;
@@ -902,44 +902,6 @@ void SensorsNAS::ledControlNAS(bool state, int address)
   }
 
   Wire.endTransmission();
-}
-
-String SensorsNAS::find(int address)
-{
-  _address = address;
-  byte error;
-  int nDevices;
-
-  Serial.println("Scanning...");
-
-  nDevices = 0;
-  for (address = 1; address < 127; address++)
-  {
-    Wire.beginTransmission(address);
-    error = Wire.endTransmission();
-
-    if (error == 0)
-    {
-      Serial.print("I2C device found at address: ");
-      if (address < 16)
-        Serial.print("0");
-      Serial.print(address);
-      Serial.println(" !");
-
-      nDevices++;
-    }
-    else if (error == 4)
-    {
-      Serial.print("Unknown error at address 0x");
-      if (address < 16)
-        Serial.print("0");
-      Serial.println(address);
-    }
-  }
-  if (nDevices == 0)
-    Serial.println("No I2C devices found\n");
-  else
-    Serial.println("Done");
 }
 
 String SensorsNAS::deviceInformation(int address)
