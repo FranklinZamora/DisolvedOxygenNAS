@@ -1022,7 +1022,7 @@ byte SensorsNAS::generateArray(byte MacID[8], SensorsNAS &sensors)
     UNSIG.bytes[0] = 0x01;
   }
 
-  byte arrayBytes[40];
+  byte arrayBytes[41];
 
   arrayBytes[0] = 0x7E;     // Start
   arrayBytes[1] = 0x00;     // length 1
