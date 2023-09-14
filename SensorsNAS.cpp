@@ -1091,7 +1091,7 @@ byte SensorsNAS::generateArray(byte MacID[8], SensorsNAS &sensors)
   // Calcular el complemento a dos
   checksum = (0xFF - checksum);
 
-  arrayBytes[39] = checksum;
+  arrayBytes[40] = checksum;
 
   // Serial.println(checksum, HEX);
 
