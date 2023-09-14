@@ -1075,7 +1075,7 @@ byte SensorsNAS::generateArray(byte MacID[8], SensorsNAS &sensors)
   uint16_t checksum = 0;
 
   // Calcular la suma de los bytes
-  for (int i = 3; i <= 38; i++)
+  for (int i = 3; i <= 39; i++)
   {
     checksum += arrayBytes[i];
     // Serial.print(checksum, HEX);
