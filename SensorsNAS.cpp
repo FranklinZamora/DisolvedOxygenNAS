@@ -1064,7 +1064,7 @@ byte SensorsNAS::generateArray(byte MacID[8], SensorsNAS &sensors)
 
   arrayBytes[0] = 0x7E;     // Start
   arrayBytes[1] = 0x00;     // length 1
-  arrayBytes[2] = 0x24;     // Length 2
+  arrayBytes[2] = 0x25;     // Length 2
   arrayBytes[3] = 0x10;     // Frametype
   arrayBytes[4] = 0x00;     // Frame ID
   arrayBytes[5] = MacID[0]; // Start Mac ID
@@ -1081,34 +1081,34 @@ byte SensorsNAS::generateArray(byte MacID[8], SensorsNAS &sensors)
   arrayBytes[16] = 0x00;     // Option
 
   arrayBytes[17] = 0x48; // Payload Start
+  arrayBytes[18] = 0x3F;
+  arrayBytes[19] = DisolvedOx.bytes[1];
+  arrayBytes[20] = DisolvedOx.bytes[0];
 
-  arrayBytes[18] = DisolvedOx.bytes[1];
-  arrayBytes[19] = DisolvedOx.bytes[0];
+  arrayBytes[21] = SaturationOx.bytes[1];
+  arrayBytes[22] = SaturationOx.bytes[0];
 
-  arrayBytes[20] = SaturationOx.bytes[1];
-  arrayBytes[21] = SaturationOx.bytes[0];
+  arrayBytes[23] = Ph.bytes[1];
+  arrayBytes[24] = Ph.bytes[0];
 
-  arrayBytes[22] = Ph.bytes[1];
-  arrayBytes[23] = Ph.bytes[0];
+  arrayBytes[25] = EC.bytes[3];
+  arrayBytes[26] = EC.bytes[2];
+  arrayBytes[27] = EC.bytes[1];
+  arrayBytes[28] = EC.bytes[0];
 
-  arrayBytes[24] = EC.bytes[3];
-  arrayBytes[25] = EC.bytes[2];
-  arrayBytes[26] = EC.bytes[1];
-  arrayBytes[27] = EC.bytes[0];
+  arrayBytes[29] = TDS.bytes[3];
+  arrayBytes[30] = TDS.bytes[2];
+  arrayBytes[31] = TDS.bytes[1];
+  arrayBytes[32] = TDS.bytes[0];
 
-  arrayBytes[28] = TDS.bytes[3];
-  arrayBytes[29] = TDS.bytes[2];
-  arrayBytes[30] = TDS.bytes[1];
-  arrayBytes[31] = TDS.bytes[0];
+  arrayBytes[33] = SAL.bytes[1];
+  arrayBytes[34] = SAL.bytes[0];
 
-  arrayBytes[32] = SAL.bytes[1];
-  arrayBytes[33] = SAL.bytes[0];
-
-  arrayBytes[34] = SG.bytes[0]; // End payload
-  arrayBytes[35] = UNSIG.bytes[0];
-  arrayBytes[36] = ORP.bytes[2];
-  arrayBytes[37] = ORP.bytes[1];
-  arrayBytes[38] = ORP.bytes[0];
+  arrayBytes[35] = SG.bytes[0]; // End payload
+  arrayBytes[36] = UNSIG.bytes[0];
+  arrayBytes[37] = ORP.bytes[2];
+  arrayBytes[38] = ORP.bytes[1];
+  arrayBytes[39] = ORP.bytes[0];
 
   uint16_t checksum = 0;
 
