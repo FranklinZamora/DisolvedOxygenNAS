@@ -10,7 +10,16 @@ SensorsNAS::SensorsNAS(int add_DO, int add_PH, int add_EC, int add_ORP)
   _address4 = add_ORP;
 
   Wire.begin();
-  Serial2.begin(9600);
+  // Serial2.begin(9600);
+}
+
+void SensorsNAS::begin(SensorsNAS &sensors)
+{
+  Serial.println("Zzzz");
+  sensors.sleepNAS(97);
+  sensors.sleepNAS(98);
+  sensors.sleepNAS(99);
+  sensors.sleepNAS(100);
 }
 
 float SensorsNAS::getDO()
@@ -1102,7 +1111,7 @@ byte SensorsNAS::generateArray(byte MacID[8], SensorsNAS &sensors)
       Serial.print("0"); // Agregar un 0 en caso necesario para el formato
     }
     Serial.print(arrayBytes[i], HEX);
-    Serial2.write(arrayBytes[i]);
+    // Serial2.write(arrayBytes[i]);
 
     Serial.print(" ");
     // Serial2.write(arrayBytes[i], HEX);

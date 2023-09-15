@@ -20,6 +20,7 @@ public:
   float getSalCompensationDO();
   float getAtmosphericPressureCompensation();
   byte generateArray(byte MacID[8], SensorsNAS &sensors);
+  void begin(SensorsNAS &sensors);
   void sleepNAS(int address);
   void ledControlNAS(bool state, int address);
   void enableMgO2();
@@ -33,7 +34,6 @@ public:
   bool setTempCompensationDO(float temperature);
   bool setSalCompensationDO(float salinity);
   bool setAtmosphericPressureCompensation(float atPressure);
-  String find(int address);
   String exportCalibrationDO();
   String getName(int address);
   String deviceInformation(int address);
