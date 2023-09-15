@@ -36,6 +36,10 @@ To use this library in your project, you should:
 SensorsNAS sensors(O2, PH, EC, ORP);
 
 ```
+3. In the setup add begin to sleep the sensors by default.
+```c++
+    sensors.begin(sensors);
+```
 4. Use the generate array method to generate an xbee frame.
 
 ```c++
