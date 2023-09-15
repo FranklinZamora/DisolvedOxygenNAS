@@ -15,7 +15,6 @@ SensorsNAS::SensorsNAS(int add_DO, int add_PH, int add_EC, int add_ORP)
 
 void SensorsNAS::begin(SensorsNAS &sensors)
 {
-  Serial.println("Zzzz");
   sensors.sleepNAS(97);
   sensors.sleepNAS(98);
   sensors.sleepNAS(99);
@@ -24,8 +23,13 @@ void SensorsNAS::begin(SensorsNAS &sensors)
 
 float SensorsNAS::getDO()
 {
-  byte DO_data[48];
+  byte code = 0;
+  char do_data[32];
+  byte in_char = 0;
   int i = 0;
+
+  char *DO;
+  char *sat;
 
   // Send command to read DO data to sensor
   Wire.beginTransmission(_address1);
@@ -37,91 +41,33 @@ float SensorsNAS::getDO()
   {
     // Wait
   }
+  Wire.requestFrom(_address1, 32, 1);
+  code = Wire.read();
 
-  // Request data from sensor
-  Wire.requestFrom(_address1, 48, 1);
+  switch (code)
+  {
+  case 1:
+    Serial.print("");
+    break;
+  }
 
   while (Wire.available())
-  {
-    byte b = Wire.read();
-    if (b == 0x00)
-    { // Stop reading when the first null byte is encountered
-      break;
-    }
-    else if (b != 0x01 && b != 0x02)
-    { // Ignore the STX (0x02) and SOH (0x01) characters
-      DO_data[i] = b;
-      i++;
+  {                        // are there bytes to receive.
+    in_char = Wire.read(); // receive a byte.
+    do_data[i] = in_char;  // load this byte into our array.
+    i += 1;                // incur the counter for the array element.
+    if (in_char == 0)
+    {        // if we see that we have been sent a null command.
+      i = 0; // reset the counter i to 0.
+      break; // exit the while loop.
     }
   }
 
-  DO_data[i] = '\0'; // Null-terminate the array
+  DO = strtok(do_data, ",");
+  sat = strtok(NULL, ",");
 
-  String data = ""; // Empty string to hold the data
-  // Convert the data into a String
-  for (int j = 0; j < i; j++)
-  {
-    data += (char)DO_data[j];
-  }
-
-  int commaIndex = data.indexOf(',');
-  String DO_str = data.substring(0, commaIndex);
-  String saturacion_str = data.substring(commaIndex + 1);
-
-  _DO = DO_str.toFloat();
-  _saturacionOxigeno = saturacion_str.toFloat();
-  return _DO;
-}
-
-float SensorsNAS::getSAT()
-{
-  byte DO_data[48];
-  int i = 0;
-
-  // Send command to read DO data to sensor
-  Wire.beginTransmission(_address1);
-  Wire.write("R");
-  Wire.endTransmission();
-
-  unsigned long startTime = millis();
-  while (millis() - startTime < 600)
-  {
-    // Wait
-  }
-
-  // Request data from sensor
-  Wire.requestFrom(_address1, 48, 1);
-
-  while (Wire.available())
-  {
-    byte b = Wire.read();
-    if (b == 0x00)
-    { // Stop reading when the first null byte is encountered
-      break;
-    }
-    else if (b != 0x01 && b != 0x02)
-    { // Ignore the STX (0x02) and SOH (0x01) characters
-      DO_data[i] = b;
-      i++;
-    }
-  }
-
-  DO_data[i] = '\0'; // Null-terminate the array
-
-  String data = ""; // Empty string to hold the data
-  // Convert the data into a String
-  for (int j = 0; j < i; j++)
-  {
-    data += (char)DO_data[j];
-  }
-
-  int commaIndex = data.indexOf(',');
-  String DO_str = data.substring(0, commaIndex);
-  String saturacion_str = data.substring(commaIndex + 1);
-
-  //_DO = DO_str.toFloat();
-  _saturacionOxigeno = saturacion_str.toFloat();
-  return _saturacionOxigeno;
+  _DO = atof(DO);
+  _SAT = atof(sat);
 }
 
 void SensorsNAS::calibrateDO(String calibrationValue)
@@ -670,139 +616,9 @@ float SensorsNAS::getEC()
   char ec_data[32]; // we make a 32 byte character array to hold incoming data from the EC circuit.
   byte in_char = 0;
   byte i = 0;
-  byte serial_event = 0;
   char *ec;
-
-  Wire.beginTransmission(_address3);
-  Wire.write("R");
-  Wire.endTransmission();
-
-  unsigned long startTime = millis();
-  while (millis() - startTime < 900)
-  {
-  }
-
-  Wire.requestFrom(_address3, 32, 1);
-  code = Wire.read();
-
-  switch (code)
-  {                   // switch case based on what the response code is.
-  case 1:             // decimal 1.
-    Serial.print(""); // means the command was successful.
-    break;            // exits the switch case.
-  }
-
-  while (Wire.available())
-  {                        // are there bytes to receive.
-    in_char = Wire.read(); // receive a byte.
-    ec_data[i] = in_char;  // load this byte into our array.
-    i += 1;                // incur the counter for the array element.
-    if (in_char == 0)
-    {        // if we see that we have been sent a null command.
-      i = 0; // reset the counter i to 0.
-      break; // exit the while loop.
-    }
-  }
-  ec = strtok(ec_data, ","); // let's pars the string at each comma.
-  _EC = atof(ec);
-  return _EC;
-} // End
-
-float SensorsNAS::getTDS()
-{
-  byte code = 0;
-  char ec_data[32]; // we make a 32 byte character array to hold incoming data from the EC circuit.
-  byte in_char = 0;
-  byte i = 0;
-  byte serial_event = 0;
   char *tds;
-
-  Wire.beginTransmission(_address3);
-  Wire.write("R");
-  Wire.endTransmission();
-
-  unsigned long startTime = millis();
-  while (millis() - startTime < 900)
-  {
-  }
-
-  Wire.requestFrom(_address3, 32, 1);
-  code = Wire.read();
-
-  switch (code)
-  {                   // switch case based on what the response code is.
-  case 1:             // decimal 1.
-    Serial.print(""); // means the command was successful.
-    break;            // exits the switch case.
-  }
-
-  while (Wire.available())
-  {                        // are there bytes to receive.
-    in_char = Wire.read(); // receive a byte.
-    ec_data[i] = in_char;  // load this byte into our array.
-    i += 1;                // incur the counter for the array element.
-    if (in_char == 0)
-    {        // if we see that we have been sent a null command.
-      i = 0; // reset the counter i to 0.
-      break; // exit the while loop.
-    }
-  }
-  tds = strtok(NULL, ","); // let's pars the string at each comma.
-  _TDS = atof(tds);
-  return _TDS;
-}
-
-float SensorsNAS::getSAL()
-{
-  byte code = 0;
-  char ec_data[32]; // we make a 32 byte character array to hold incoming data from the EC circuit.
-  byte in_char = 0;
-  byte i = 0;
-  byte serial_event = 0;
   char *sal;
-
-  Wire.beginTransmission(_address3);
-  Wire.write("R");
-  Wire.endTransmission();
-
-  unsigned long startTime = millis();
-  while (millis() - startTime < 900)
-  {
-  }
-
-  Wire.requestFrom(_address3, 32, 1);
-  code = Wire.read();
-
-  switch (code)
-  {                   // switch case based on what the response code is.
-  case 1:             // decimal 1.
-    Serial.print(""); // means the command was successful.
-    break;            // exits the switch case.
-  }
-
-  while (Wire.available())
-  {                        // are there bytes to receive.
-    in_char = Wire.read(); // receive a byte.
-    ec_data[i] = in_char;  // load this byte into our array.
-    i += 1;                // incur the counter for the array element.
-    if (in_char == 0)
-    {        // if we see that we have been sent a null command.
-      i = 0; // reset the counter i to 0.
-      break; // exit the while loop.
-    }
-  }
-  sal = strtok(NULL, ","); // let's pars the string at each comma.
-  _SAL = atof(sal);
-  return _SAL;
-}
-
-float SensorsNAS::getSG()
-{
-  byte code = 0;
-  char ec_data[32]; // we make a 32 byte character array to hold incoming data from the EC circuit.
-  byte in_char = 0;
-  byte i = 0;
-  byte serial_event = 0;
   char *sg;
 
   Wire.beginTransmission(_address3);
@@ -835,64 +651,24 @@ float SensorsNAS::getSG()
       break; // exit the while loop.
     }
   }
-  sg = strtok(NULL, ","); // let's pars the string at each comma.
+  ec = strtok(ec_data, ","); // let's pars the string at each comma.
+  tds = strtok(NULL, ",");
+  sal = strtok(NULL, ",");
+  sg = strtok(NULL, ",");
+
+  _EC = atof(ec);
+  _TDS = atof(tds);
+  _SAL = atof(sal);
   _SG = atof(sg);
-  return _SG;
-}
+
+} // End
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 void SensorsNAS::sleepNAS(int address)
 {
   _address = address;
-  byte DO_data[48];
-  int i = 0;
-
-  // Send command to read DO data to sensor
   Wire.beginTransmission(_address);
-  Wire.write("R");
-  Wire.endTransmission();
-
-  unsigned long startTime = millis();
-  while (millis() - startTime < 1000)
-  {
-    // Wait
-  }
-
-  // Request data from sensor
-  Wire.requestFrom(_address, 48, 1);
-
-  while (Wire.available())
-  {
-    byte b = Wire.read();
-    if (b == 0x00)
-    { // Stop reading when the first null byte is encountered
-      break;
-    }
-    else if (b != 0x01 && b != 0x02)
-    { // Ignore the STX (0x02) and SOH (0x01) characters
-      DO_data[i] = b;
-      i++;
-    }
-  }
-
-  DO_data[i] = '\0'; // Null-terminate the array
-
-  String data = ""; // Empty string to hold the data
-  // Convert the data into a String
-  for (int j = 0; j < i; j++)
-  {
-    data += (char)DO_data[j];
-  }
-
-  int commaIndex = data.indexOf(',');
-  String DO_str = data.substring(0, commaIndex);
-  String saturacion_str = data.substring(commaIndex + 1);
-
-  _DO = DO_str.toFloat();
-  _saturacionOxigeno = saturacion_str.toFloat();
-  // Send "Sleep" command to the sensor
-  Wire.beginTransmission(_address);
-  Wire.write("Sleep");
+  Wire.write("sleep");
   Wire.endTransmission();
 }
 
@@ -1012,12 +788,17 @@ byte SensorsNAS::generateArray(byte MacID[8], SensorsNAS &sensors)
   UINT16_t DisolvedOx, SaturationOx, Ph, SAL;
   UINT8_t SG;
 
-  DisolvedOx.value = sensors.getDO() * 100;
-  SaturationOx.value = sensors.getSAT() * 100;
-  EC.value = sensors.getEC() * 100;
-  TDS.value = sensors.getTDS() * 100;
-  SAL.value = sensors.getSAL() * 100;
-  SG.value = sensors.getSG() * 100;
+  sensors.getDO(); // Hablar a la funcion para obtener los 2 valores
+
+  DisolvedOx.value = _DO * 100;
+  SaturationOx.value = _SAT * 100;
+
+  sensors.getEC(); // Hablar a la funcion para obtener los 4 valores
+
+  EC.value = _EC * 100;
+  TDS.value = _TDS * 100;
+  SAL.value = _SAL * 100;
+  SG.value = _SG * 100;
   Ph.value = sensors.getPH() * 100;
   ORP.value = sensors.getORP() * 100;
 

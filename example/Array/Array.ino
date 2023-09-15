@@ -18,6 +18,5 @@ void loop()
 {
     byte MacID[8] = {0x00, 0x13, 0xA2, 0x00, 0x41, 0xEA, 0x56, 0x3F};
     sensors.generateArray(MacID, sensors);
-
     delay(2000);
 }

@@ -8,14 +8,10 @@ class SensorsNAS
 {
 public:
   SensorsNAS(int add_DO, int add_PH, int add_EC, int add_ORP);
-  float getORP();
   float getDO();
-  float getSAT();
+  float getORP();
   float getPH();
   float getEC();
-  float getTDS();
-  float getSAL();
-  float getSG();
   float getTempCompensationDO();
   float getSalCompensationDO();
   float getAtmosphericPressureCompensation();
@@ -66,7 +62,7 @@ private:
   int _address3;
   int _address4;
   float _DO;
-  float _saturacionOxigeno;
+  float _SAT;
   float _PH;
   float _EC;
   float _TDS;
