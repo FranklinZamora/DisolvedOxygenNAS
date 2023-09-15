@@ -38,13 +38,13 @@ SensorsNAS sensors(O2, PH, EC, ORP);
 ```
 4. In the setup add begin to sleep the sensors by default.
 ```c++
-    sensors.begin(sensors);
+sensors.begin(sensors);
 ```
 5. Use the generate array method to generate an xbee frame.
 
 ```c++
-    byte MacID[8] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
-    sensors.generateArray(MacID, sensors);
+byte MacID[8] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+sensors.generateArray(MacID, sensors);
 ```
 
 ## Note
