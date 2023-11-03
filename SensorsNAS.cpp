@@ -1,20 +1,22 @@
 #include "SensorsNAS.h"
-#include <Arduino.h>
-#include <Wire.h>
 
-SensorsNAS::SensorsNAS(int add_DO, int add_PH, int add_EC, int add_ORP)
+SensorsNAS::SensorsNAS(int add_DO, int add_PH, int add_EC, int add_ORP) : xbeeSerial(12, 11)
 {
   _address1 = add_DO;
   _address2 = add_PH;
   _address3 = add_EC;
   _address4 = add_ORP;
-
-  Wire.begin();
-  // Serial2.begin(9600);
+#ifdef __AVR_ATmega5660__
+  Serial2.begin(9600);
+#endif
+#ifdef __AVR_ATmega328P__
+  xbeeSerial.begin(9600);
+#endif
 }
 
 void SensorsNAS::begin(SensorsNAS &sensors)
 {
+  Wire.begin();
   sensors.sleepNAS(97);
   sensors.sleepNAS(98);
   sensors.sleepNAS(99);
@@ -892,13 +894,20 @@ byte SensorsNAS::generateArray(byte MacID[8], SensorsNAS &sensors)
       Serial.print("0"); // Agregar un 0 en caso necesario para el formato
     }
     Serial.print(arrayBytes[i], HEX);
-    // Serial2.write(arrayBytes[i]);
 
+#ifdef __AVR_ATmega5660__
+    Serial2.write(arrayBytes[i]);
+    Serial2.print(" ");
+#endif
     Serial.print(" ");
-    // Serial2.write(arrayBytes[i], HEX);
   }
 
   Serial.println();
+
+#ifdef __AVR_ATmega328P__
+  xbeeSerial.write(arrayBytes, sizeof(arrayBytes));
+#endif
+
   sensors.sleepNAS(97);
   sensors.sleepNAS(98);
   sensors.sleepNAS(99);
