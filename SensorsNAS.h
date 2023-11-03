@@ -3,6 +3,7 @@
 
 #include "Arduino.h"
 #include "Wire.h"
+#include "SoftwareSerial.h"
 
 class SensorsNAS
 {
@@ -70,6 +71,8 @@ private:
   float _SG;
   float _ORP;
   byte _array;
+
+  SoftwareSerial xbeeSerial;
 };
 
 #endif
