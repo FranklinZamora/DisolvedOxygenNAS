@@ -1,4 +1,4 @@
-<h1 align="center"> Sensors NAS lib </h1>
+<h1 align="center"> AquaNode </h1>
 
 ![Sin título (1000 x 500 px)](https://github.com/FranklinZamora/SensorsNAS/assets/139190968/dd34b7ae-60c4-4c73-b87e-0187c1f9dfec)
 
