@@ -5,7 +5,7 @@
 
 ![Static Badge](https://img.shields.io/badge/NAS-green) ![Static Badge](https://img.shields.io/badge/pre_lease-v1-blue)
 
-https://img.shields.io/badge/GitLab-330F63?style=for-the-badge&logo=gitlab&logoColor=white
+https://img.shields.io/badge/any_text-you_like-blue
 
 
 ## Description
