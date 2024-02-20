@@ -23,7 +23,7 @@ This repository contains a custom Arduino library and corresponding sketch for i
 To use this library in your project, you should:
 
 1. Clone this repository.
-2. Include the `SensorsNAS.h` header file in your Arduino sketch.
+2. Include the `SensorsNAS.h` header file in your Script.
 ```c++
 #include <SensorsNAS.h>
 ```
