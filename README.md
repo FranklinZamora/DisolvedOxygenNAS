@@ -1,7 +1,6 @@
 <h1 align="center"> Sensors NAS lib </h1>
 
-
-![Ochoa y nas](https://github.com/FranklinZamora/DisolvedOxygenNAS/assets/139190968/15cde0c5-1ac3-41b4-be1b-8bb1c6e12295) 
+![Sin título (1000 x 500 px)](https://github.com/FranklinZamora/SensorsNAS/assets/139190968/dd34b7ae-60c4-4c73-b87e-0187c1f9dfec)
 
 [![NAS-Board - Library](https://img.shields.io/badge/NAS--Board-Library-blue?logo=c%2B%2B)](https://)
 [![NAS - Technology](https://img.shields.io/badge/NAS-Technology-2ea44f)](https://) [![AquaNode](https://img.shields.io/badge/AquaNode-2ea44f)](https://) [![V - 1.0](https://img.shields.io/badge/V-1.0-red)](https://) 
