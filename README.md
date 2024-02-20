@@ -5,7 +5,7 @@
 
 ![Static Badge](https://img.shields.io/badge/NAS-green)
 
-![Static Badge](https://img.shields.io/badge/AquaNode?style=flat&color=%2303AC13)
+[![AquaNode](https://img.shields.io/badge/AquaNode-2ea44f)](https://)
 
 
 
