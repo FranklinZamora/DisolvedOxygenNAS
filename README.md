@@ -5,6 +5,9 @@
 
 ![Static Badge](https://img.shields.io/badge/NAS-green) ![Static Badge](https://img.shields.io/badge/pre_lease-v1-blue)
 
+![Static Badge](https://img.shields.io/badge/AquaNode?style=flat&color=%2303AC13)
+
+
 
 ## Description
 
