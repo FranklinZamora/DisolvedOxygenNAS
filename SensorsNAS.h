@@ -16,6 +16,7 @@ public:
   float getTempCompensationDO();
   float getSalCompensationDO();
   float getAtmosphericPressureCompensation();
+<<<<<<< HEAD
   float takingreadDO();
   float takingreadSAT();
   float takingreadEC();
@@ -27,6 +28,10 @@ public:
   byte generateArray(byte MacID[8], SensorsNAS &sensors);
   void begin(SensorsNAS &sensors);
   void updateValue(SensorsNAS &sensors);
+=======
+  byte generateArray(byte MacID[8], SensorsNAS &sensors);
+  void begin(SensorsNAS &sensors);
+>>>>>>> 9010ba869511b68556720d90e930324a023d84b5
   void sleepNAS(int address);
   void ledControlNAS(bool state, int address);
   void enableMgO2();

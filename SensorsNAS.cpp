@@ -6,7 +6,11 @@ SensorsNAS::SensorsNAS(int add_DO, int add_PH, int add_EC, int add_ORP) : xbeeSe
   _address2 = add_PH;
   _address3 = add_EC;
   _address4 = add_ORP;
+<<<<<<< HEAD
 #ifdef __AVR_ATmega2560__
+=======
+#ifdef __AVR_ATmega5660__
+>>>>>>> 9010ba869511b68556720d90e930324a023d84b5
   Serial2.begin(9600);
 #endif
 #ifdef __AVR_ATmega328P__
@@ -70,6 +74,7 @@ float SensorsNAS::getDO()
 
   _DO = atof(DO);
   _SAT = atof(sat);
+<<<<<<< HEAD
 }
 
 float SensorsNAS::takingreadDO()
@@ -80,6 +85,8 @@ float SensorsNAS::takingreadDO()
 float SensorsNAS::takingreadSAT()
 {
   return _SAT;
+=======
+>>>>>>> 9010ba869511b68556720d90e930324a023d84b5
 }
 
 void SensorsNAS::calibrateDO(String calibrationValue)
@@ -679,6 +686,7 @@ float SensorsNAS::getEC()
 
 } // End
 
+<<<<<<< HEAD
 float SensorsNAS::takingreadEC()
 {
   return _EC;
@@ -698,6 +706,8 @@ float SensorsNAS::takingreadSG()
 {
   return _SG;
 }
+=======
+>>>>>>> 9010ba869511b68556720d90e930324a023d84b5
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 void SensorsNAS::sleepNAS(int address)
 {
@@ -815,11 +825,14 @@ float SensorsNAS::getORP()
   return _ORP;
 }
 
+<<<<<<< HEAD
 float SensorsNAS::takingreadORP()
 {
   return _ORP;
 }
 
+=======
+>>>>>>> 9010ba869511b68556720d90e930324a023d84b5
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 byte SensorsNAS::generateArray(byte MacID[8], SensorsNAS &sensors)
 {
@@ -933,10 +946,18 @@ byte SensorsNAS::generateArray(byte MacID[8], SensorsNAS &sensors)
     }
     Serial.print(arrayBytes[i], HEX);
 
+<<<<<<< HEAD
+=======
+#ifdef __AVR_ATmega5660__
+    Serial2.write(arrayBytes[i]);
+    Serial2.print(" ");
+#endif
+>>>>>>> 9010ba869511b68556720d90e930324a023d84b5
     Serial.print(" ");
   }
 
   Serial.println();
+<<<<<<< HEAD
 
 #ifdef __AVR_ATmega2560__
   Serial2.write(arrayBytes, sizeof(arrayBytes));
@@ -960,9 +981,21 @@ void SensorsNAS::updateValue(SensorsNAS &sensors)
   getEC();
   getPH();
   getORP();
+=======
+
+#ifdef __AVR_ATmega328P__
+  xbeeSerial.write(arrayBytes, sizeof(arrayBytes));
+#endif
+>>>>>>> 9010ba869511b68556720d90e930324a023d84b5
 
   sensors.sleepNAS(97);
   sensors.sleepNAS(98);
   sensors.sleepNAS(99);
   sensors.sleepNAS(100);
+<<<<<<< HEAD
 }
+=======
+
+  // Serial.println("***********************************");
+}
+>>>>>>> 9010ba869511b68556720d90e930324a023d84b5

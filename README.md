@@ -1,14 +1,14 @@
-<h1 align="center"> Sensors NAS lib </h1>
+<h1 align="center"> AquaNode </h1>
 
+![Sin título (1000 x 500 px)](https://github.com/FranklinZamora/SensorsNAS/assets/139190968/dd34b7ae-60c4-4c73-b87e-0187c1f9dfec)
 
-![Ochoa y nas](https://github.com/FranklinZamora/DisolvedOxygenNAS/assets/139190968/15cde0c5-1ac3-41b4-be1b-8bb1c6e12295) 
-
-![Static Badge](https://img.shields.io/badge/NAS-green) ![Static Badge](https://img.shields.io/badge/pre_lease-v1-blue)
+[![NAS-Board - Library](https://img.shields.io/badge/NAS--Board-Library-blue?logo=c%2B%2B)](https://)
+[![NAS - Technology](https://img.shields.io/badge/NAS-Technology-2ea44f)](https://) [![AquaNode](https://img.shields.io/badge/AquaNode-2ea44f)](https://) [![V - 1.0](https://img.shields.io/badge/V-1.0-red)](https://) 
 
 
 ## Description
 
-This repository contains a custom Arduino library and corresponding sketch for interfacing with a Dissolved Oxygen (DO) sensor via I2C. The `OxygenNAS` library, designed specifically for Ochoa Technology, simplifies reading dissolved oxygen and oxygen saturation values from the sensor, as well as controlling the sensor's low-power mode and LED state.
+This repository contains a custom Arduino library and corresponding sketch for interfacing with a different sensors via I2C. The `SensorNAS` library, designed specifically for Ochoa Technology, simplifies reading O2, SAT, EC, TDS, SAL, SG, ORP and PH values from the sensor, as well as controlling the sensor's low-power mode and LED state.
 
 ## Features
 
@@ -16,41 +16,36 @@ This repository contains a custom Arduino library and corresponding sketch for i
 - Capability to put the sensor into a low-power ("sleep") mode.
 - Functionality to control the sensor's built-in LED.
 - The provided example sketch allows user interaction via the serial monitor to control the sleep mode and LED state of the sensor.
-- Find sensor addres
 
 ## Usage
 
 To use this library in your project, you should:
 
 1. Clone this repository.
-2. Include the `OxygenNAS.h` header file in your Arduino sketch.
+2. Include the `SensorsNAS.h` header file in your Script.
 ```c++
-#include <OxygenNAS.h>
+#include <SensorsNAS.h>
 ```
-3. Create an instance of the `OxygenNAS` class, specifying your sensor's I2C address.
+3. Instantiate the sensors in a class with these addresses:
 ```c++
-OxygenNAS sensor(97); // replace 97 with your sensor's I2C address
-```
-4. Use the `update`, `getDO`, `getSaturacionOxigeno`, `sleep`, `find`, and `ledControl` methods to interact with the sensor.
+#define O2 97
+#define PH 98
+#define EC 99
+#define ORP 100
 
-The `ledControlNAS()` method is a function in the `OxygenNAS` library that takes a boolean as an argument. It sends a command over I2C to control the state of the sensor's built-in LED. If true is passed to this method, the LED will turn on. If false is passed, the LED will turn off. 
+SensorsNAS sensors(O2, PH, EC, ORP);
+
+```
+4. In the setup add begin to sleep the sensors by default
+```c++
+sensors.begin(sensors);
+```
+5. Use the generate array method to generate an xbee frame.
 
 ```c++
-sensor.ledControlNAS(false); // Turn off the LED
-sensor.ledControlNAS(true); // Turn on the LED
+byte MacID[8] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+sensors.generateArray(MacID, sensors);
 ```
-
-The  `void find()` method scans the I2C bus and prints out the addresses of all devices found. It can be useful for diagnosing connection issues. If a device is present on the bus and functioning correctly, its address will be displayed when this method is called. If the device's address is not displayed, this may indicate a problem with the device or its connection. After scanning, the method will delay for 5 seconds to give the user time to read the displayed addresses before the program continues. This method should be called in the `setup()` 
-
-```c++
-void setup()
-{
-  Serial.begin(9600);
-  sensor.find(); // scans the I2C bus and prints out addresses of all found devices
-}
-```
-
-Remember, this method does not stop the program from proceeding if no devices are found on the bus. After the 5-second delay, the program will continue with its usual operation.
 
 ## Note
 
