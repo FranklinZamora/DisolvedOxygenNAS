@@ -50,7 +50,7 @@ byte MacID[8] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 sensors.generateArray(MacID, sensors);
 ```
 
-#####Individual values
+<h4> Individual values </h4>
 /example/Reading.ino
 
 ```c++
