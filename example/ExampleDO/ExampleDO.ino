@@ -1,21 +1,22 @@
-#include <SensorsNAS.h> //Download library made by ochoa technology in: https://github.com/FranklinZamora/SensorsNAS
+#include <SensorsNAS.h>
+#include <Arduino.h>
 
-SensorsNAS sensorDO(97); // Replace 97 with your sensor's I2C address
+#define O2 97
+#define PH 99
+#define EC 100
+#define ORP 98
+
+SensorsNAS sensors(O2, PH, EC, ORP);
 
 void setup()
 {
   Serial.begin(9600);
-  sensorDO.ledControlNAS(true); // Turn ON the LED
+  sensors.begin(sensors);
 }
 
 void loop()
 {
-  String DO = sensorDO.getDO();
-  String saturacion = sensorDO.getSAT();
-
-  Serial.print("DO: ");
-  Serial.println(DO);
-
-  Serial.print("Saturacion de oxigeno: ");
-  Serial.println(saturacion);
+  byte MacID[8] = {0x00, 0x13, 0xA2, 0x00, 0x41, 0xEA, 0x56, 0x3F};
+  sensors.generateArray(MacID, sensors);
+  delay(2000);
 }
