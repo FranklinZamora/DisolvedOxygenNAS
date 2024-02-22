@@ -7,7 +7,7 @@
 
 ## Description
 
-This repository contains a custom Arduino library and corresponding sketch for interfacing with a different sensors via I2C. The `SensorNAS` library use Atlas Scientific sensors and is designed specifically for Ochoa Technology, simplifies reading O2, SAT, EC, TDS, SAL, SG, ORP and PH values from the sensor, as well as controlling the sensor's low-power mode and LED state.
+This repository contains a custom Arduino library and correspondingtakingreadDO sketch for interfacing with a different sensors via I2C. The `SensorNAS` library use Atlas Scientific sensors and is designed specifically for Ochoa Technology, simplifies reading O2, SAT, EC, TDS, SAL, SG, ORP and PH values from the sensor, as well as controlling the sensor's low-power mode and LED state.
 
 - Easy interface for reading dissolved oxygen and oxygen saturation values.
 - Capability to put the sensor into a low-power ("sleep") mode.
@@ -50,12 +50,18 @@ byte MacID[8] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 sensors.generateArray(MacID, sensors);
 ```
 
+6. If use this library in Water Wase, use this method:
+
+```c++
+sensors.updateValue(sensors);
+```
+
+7. Then you can manipulate each value separately.
 <h4> Individual values </h4>
 /example/Reading.ino
 
 ```c++
 sensors.updateValue(sensors);
-delay(500); // Time to read the variables individually
 float _DO = sensors.takingreadDO();
 float _SAT = sensors.takingreadSAT();
 float _EC = sensors.takingreadEC();
