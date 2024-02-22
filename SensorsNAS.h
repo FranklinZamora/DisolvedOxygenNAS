@@ -16,7 +16,6 @@ public:
   float getTempCompensationDO();
   float getSalCompensationDO();
   float getAtmosphericPressureCompensation();
-<<<<<<< HEAD
   float takingreadDO();
   float takingreadSAT();
   float takingreadEC();
@@ -28,16 +27,20 @@ public:
   byte generateArray(byte MacID[8], SensorsNAS &sensors);
   void begin(SensorsNAS &sensors);
   void updateValue(SensorsNAS &sensors);
-=======
-  byte generateArray(byte MacID[8], SensorsNAS &sensors);
-  void begin(SensorsNAS &sensors);
->>>>>>> 9010ba869511b68556720d90e930324a023d84b5
   void sleepNAS(int address);
   void ledControlNAS(bool state, int address);
   void enableMgO2();
   void disableMgO2();
   void enableSatO2();
   void disableSatO2();
+  void enableEC();
+  void disableEC();
+  void enableTDS();
+  void disableTDS();
+  void enableSAL();
+  void disableSAL();
+  void enableSG();
+  void disableSG();
   void clearCalibrationDO();
   void calibrateDO(String calibrationValue);
   void setName(String name, int address);
@@ -72,10 +75,10 @@ private:
   int time;
   String x; // Variable to save received data
   int _address;
-  int _address1;
-  int _address2;
-  int _address3;
-  int _address4;
+  int DO_Address;
+  int PH_Address;
+  int EC_Address;
+  int ORP_Address;
   float _DO;
   float _SAT;
   float _PH;

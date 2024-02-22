@@ -17,7 +17,7 @@ void setup()
 void loop()
 {
     sensors.updateValue(sensors);
-    delay(500);
+
     float _DO = sensors.takingreadDO();
     float _SAT = sensors.takingreadSAT();
     float _EC = sensors.takingreadEC();
