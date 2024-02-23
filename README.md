@@ -72,6 +72,22 @@ float _PH = sensors.takingreadPH();
 float _ORP = sensors.takingreadORP();
 ```
 
+<h4> Compensation </h4>
+In this library you can use any water temperature and salinity sensor to compensate for the oxygen sensor.
+
+```c++
+sensorDS18B20.requestTemperatures();
+_waterTemp = sensorDS18B20.getTempCByIndex(0);
+
+sensors.updateValue(sensors);
+_SAL = sensors.takingreadSAL();
+```
+
+```c++
+sensors.setTempCompensationDO(_waterTemp);
+sensors.setSalCompensationDO(_SAL);
+```
+
 ## Note
 
 This library has been developed to meet the needs of Ochoa Technology and may not be directly compatible with other companies' hardware.
