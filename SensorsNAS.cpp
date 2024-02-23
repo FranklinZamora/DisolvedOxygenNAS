@@ -267,7 +267,7 @@ bool SensorsNAS::importCalibrationDO(String calibrationData)
   return false;
 }
 
-bool SensorsNAS::setTempCompensationDO(float temperature)
+float SensorsNAS::setTempCompensationDO(float temperature)
 {
   String command = "T,";
   command += String(temperature, 1); // Convert value to string
@@ -338,7 +338,7 @@ float SensorsNAS::getTempCompensationDO()
   return -999.0;
 }
 
-bool SensorsNAS::setSalCompensationDO(float saladditionalBytesy)
+float SensorsNAS::setSalCompensationDO(float saladditionalBytesy)
 {
   String command = "S,";
   command += String(saladditionalBytesy, 1);

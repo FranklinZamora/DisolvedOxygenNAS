@@ -13,7 +13,9 @@ public:
   float getORP();
   float getPH();
   float getEC();
+  float setTempCompensationDO(float temperature);
   float getTempCompensationDO();
+  float setSalCompensationDO(float salinity);
   float getSalCompensationDO();
   float getAtmosphericPressureCompensation();
   float takingreadDO();
@@ -45,8 +47,6 @@ public:
   void calibrateDO(String calibrationValue);
   void setName(String name, int address);
   bool importCalibrationDO(String calibrationData);
-  bool setTempCompensationDO(float temperature);
-  bool setSalCompensationDO(float salinity);
   bool setAtmosphericPressureCompensation(float atPressure);
   String exportCalibrationDO();
   String getName(int address);
