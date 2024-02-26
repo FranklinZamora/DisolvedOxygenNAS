@@ -1,6 +1,7 @@
 <h1 align="center"> SensorsNAS </h1>
 
-![Diseño sin título](https://github.com/FranklinZamora/SensorsNAS/assets/139190968/566cf519-2ef1-4511-a76b-b4e50007f31c)
+![Sin título (1000 x 200 px)](https://github.com/FranklinZamora/SensorsNAS/assets/139190968/f048242b-43c2-4403-bf64-cf9c4b951807)
+
 
 [![NAS-Board - Library](https://img.shields.io/badge/NAS--Board-Library-blue?logo=c%2B%2B)](https://)
 [![NAS - Technology](https://img.shields.io/badge/NAS-Technology-2ea44f)](https://) [![AquaNode](https://img.shields.io/badge/AquaNode-2ea44f)](https://) [![V - 1.0](https://img.shields.io/badge/V-1.0-red)](https://)
