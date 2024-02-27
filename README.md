@@ -1,6 +1,7 @@
 <h1 align="center"> AquaNode Library </h1>
 
-![Banner git](https://github.com/FranklinZamora/SensorsNAS/assets/139190968/f3c2506d-6d06-4810-900a-b793838e7ab4)
+![image](https://github.com/FranklinZamora/SensorsNAS/assets/139190968/0cad5830-16f4-4c51-8319-8113ade24177)
+
 
 [![NAS-Board - Library](https://img.shields.io/badge/NAS--Board-Library-blue?logo=c%2B%2B)](https://)
 [![NAS - Technology](https://img.shields.io/badge/NAS-Technology-2ea44f)](https://) [![AquaNode](https://img.shields.io/badge/AquaNode-2ea44f)](https://) [![V - 1.0](https://img.shields.io/badge/V-1.0-red)](https://)
