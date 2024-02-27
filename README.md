@@ -74,6 +74,7 @@ float _ORP = sensors.takingreadORP();
 
 <h4> Compensation </h4>
 Compensation helps us adjust changes in thermal variations, salinity and atmospheric pressure.
+Compensation helps us adjust changes in thermal variations, salinity and atmospheric pressure.
 
 ```c++
 sensorDS18B20.requestTemperatures();
@@ -81,6 +82,11 @@ _waterTemp = sensorDS18B20.getTempCByIndex(0);
 ```
 
 ```c++
+sensors.setTempCompensationDO(_waterTemp); // Temperature compensation for Dissolved Oxygen
+sensors.setTempCompensationEC(_waterTemp); // Temperature compensation for Electric Conductivity
+sensors.setTempCompensationPH(_waterTemp); // Temperature compensation for PH
+sensors.AtmosphericPressureCompensationDO(pressure); // Pressure compensation for Disolved Oxygen (add sensor value in "pressure")
+sensors.setSalCompensationDO(sensors.takingreadSAL()); // Salinity compensation for Dissolved Oxygen
 sensors.setTempCompensationDO(_waterTemp); // Temperature compensation for Dissolved Oxygen
 sensors.setTempCompensationEC(_waterTemp); // Temperature compensation for Electric Conductivity
 sensors.setTempCompensationPH(_waterTemp); // Temperature compensation for PH
