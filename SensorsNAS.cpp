@@ -69,7 +69,7 @@ float SensorsNAS::getDO()
     if (in_char == 0)
     {        // if we see that we have been sent a null command.
       i = 0; // reset the counter i to 0.
-      break; // exit the while loop.
+      break; // exvit the while loop.
     }
   }
 
@@ -407,7 +407,7 @@ float SensorsNAS::getSalCompensationDO()
   return -999.0;
 }
 
-bool SensorsNAS::setAtmosphericPressureCompensation(float atPressure)
+float SensorsNAS::setAtmosphericPressureCompensationDO(float atPressure)
 {
   String command = "P,";
   command += String(atPressure, 1);
@@ -443,7 +443,7 @@ bool SensorsNAS::setAtmosphericPressureCompensation(float atPressure)
   return false;
 }
 
-float SensorsNAS::getAtmosphericPressureCompensation()
+float SensorsNAS::getAtmosphericPressureCompensationDO()
 {
   String command = "P,?";
   Wire.beginTransmission(DO_Address);
@@ -615,24 +615,95 @@ float SensorsNAS::getPH()
   }
 
   Wire.requestFrom(PH_Address, 6, 1);
-  x = "";
+  rcv = "";
   for (int i = 0; i <= 5; i++)
   {
     data[i] = Wire.read();
     if (i != 0)
     {
-      x += char(data[i]);
+      rcv += char(data[i]);
     }
-    // x += String(data[i]);
+    // rcv += String(data[i]);
     // Serial.println(data[i]);
   }
-  _PH = x.toFloat();
+  _PH = rcv.toFloat();
   return _PH;
 }
 
 float SensorsNAS::takingreadPH()
 {
   return _PH;
+}
+
+float SensorsNAS::setTempCompensationPH(float temperature)
+{
+  String command = "T,";
+  command += String(temperature, 1); // Convert value to string
+
+  Wire.beginTransmission(PH_Address);
+  Wire.write(command.c_str());
+  Wire.endTransmission();
+
+  unsigned long startTime = millis();
+
+  while (millis() - startTime < 300)
+  {
+    // Wait
+  }
+
+  // Request data from sensor
+  byte response[20];
+  Wire.requestFrom(PH_Address, 20);
+  if (Wire.available())
+  {
+    byte i = 0;
+    while (Wire.available() && i < 20)
+    {
+      response[i++] = Wire.read();
+    }
+
+    if (response[0] == 1)
+    {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+float SensorsNAS::getTempCompensationPH()
+{
+  String command = "T,?";
+  Wire.beginTransmission(PH_Address);
+  Wire.write(command.c_str());
+  Wire.endTransmission();
+
+  unsigned long startTime = millis();
+
+  while (millis() - startTime < 500)
+  {
+    // Wait
+  }
+
+  // Request data from sensor
+  Wire.requestFrom(PH_Address, 20);
+  String response = "";
+  while (Wire.available())
+  {
+    char c = Wire.read();
+    response += c;
+  }
+
+  for (int i = 0; i < response.length(); i++)
+  {
+    if (isdigit(response.charAt(i)))
+    {
+      float temperature = response.substring(i).toFloat();
+      return temperature;
+    }
+  }
+
+  return -999.0;
 }
 
 float SensorsNAS::getEC()
@@ -818,6 +889,77 @@ float SensorsNAS::takingreadSAL()
 float SensorsNAS::takingreadSG()
 {
   return _SG;
+}
+
+float SensorsNAS::setTempCompensationEC(float temperature)
+{
+  String command = "T,";
+  command += String(temperature, 1); // Convert value to string
+
+  Wire.beginTransmission(EC_Address);
+  Wire.write(command.c_str());
+  Wire.endTransmission();
+
+  unsigned long startTime = millis();
+
+  while (millis() - startTime < 300)
+  {
+    // Wait
+  }
+
+  // Request data from sensor
+  byte response[20];
+  Wire.requestFrom(EC_Address, 20);
+  if (Wire.available())
+  {
+    byte i = 0;
+    while (Wire.available() && i < 20)
+    {
+      response[i++] = Wire.read();
+    }
+
+    if (response[0] == 1)
+    {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+float SensorsNAS::getTempCompensationEC()
+{
+  String command = "T,?";
+  Wire.beginTransmission(EC_Address);
+  Wire.write(command.c_str());
+  Wire.endTransmission();
+
+  unsigned long startTime = millis();
+
+  while (millis() - startTime < 500)
+  {
+    // Wait
+  }
+
+  // Request data from sensor
+  Wire.requestFrom(EC_Address, 20);
+  String response = "";
+  while (Wire.available())
+  {
+    char c = Wire.read();
+    response += c;
+  }
+
+  for (int i = 0; i < response.length(); i++)
+  {
+    if (isdigit(response.charAt(i)))
+    {
+      float temperature = response.substring(i).toFloat();
+      return temperature;
+    }
+  }
+
+  return -999.0;
 }
 
 void SensorsNAS::sleepNAS(int address)
@@ -1074,8 +1216,6 @@ byte SensorsNAS::generateArray(byte MacID[8], SensorsNAS &sensors)
   sensors.sleepNAS(98);
   sensors.sleepNAS(99);
   sensors.sleepNAS(100);
-
-  // Serial.println("***********************************");
 }
 
 void SensorsNAS::updateValue(SensorsNAS &sensors) // This method is for WaterWise

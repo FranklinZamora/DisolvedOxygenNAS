@@ -17,14 +17,19 @@ public:
   float getTempCompensationDO();
   float setSalCompensationDO(float salinity);
   float getSalCompensationDO();
-  float getAtmosphericPressureCompensation();
+  float getAtmosphericPressureCompensationDO();
+  float setAtmosphericPressureCompensationDO(float atPressure);
   float takingreadDO();
   float takingreadSAT();
   float takingreadEC();
+  float setTempCompensationEC(float temperature);
+  float getTempCompensationEC();
   float takingreadTDS();
   float takingreadSAL();
   float takingreadSG();
   float takingreadPH();
+  float setTempCompensationPH(float temperature);
+  float getTempCompensationPH();
   float takingreadORP();
   byte generateArray(byte MacID[8], SensorsNAS &sensors);
   void begin(SensorsNAS &sensors);
@@ -47,7 +52,6 @@ public:
   void calibrateDO(String calibrationValue);
   void setName(String name, int address);
   bool importCalibrationDO(String calibrationData);
-  bool setAtmosphericPressureCompensation(float atPressure);
   String exportCalibrationDO();
   String getName(int address);
   String deviceInformation(int address);
@@ -73,7 +77,7 @@ public:
 
 private:
   int time;
-  String x; // Variable to save received data
+  String rcv; // Variable to save received data
   int _address;
   int DO_Address;
   int PH_Address;

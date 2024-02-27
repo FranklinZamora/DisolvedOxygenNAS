@@ -1,6 +1,6 @@
-<h1 align="center"> SensorsNAS </h1>
+<h1 align="center"> AquaNode Library </h1>
 
-![Sin título (1000 x 500 px)](https://github.com/FranklinZamora/SensorsNAS/assets/139190968/dd34b7ae-60c4-4c73-b87e-0187c1f9dfec)
+<a href="https://ibb.co/ngNbR3C"><img src="https://i.ibb.co/6n7mNvB/Banner-git.png" alt="Banner-git" border="0"></a>
 
 [![NAS-Board - Library](https://img.shields.io/badge/NAS--Board-Library-blue?logo=c%2B%2B)](https://)
 [![NAS - Technology](https://img.shields.io/badge/NAS-Technology-2ea44f)](https://) [![AquaNode](https://img.shields.io/badge/AquaNode-2ea44f)](https://) [![V - 1.0](https://img.shields.io/badge/V-1.0-red)](https://)
@@ -73,19 +73,19 @@ float _ORP = sensors.takingreadORP();
 ```
 
 <h4> Compensation </h4>
-In this library you can use any water temperature and salinity sensor to compensate for the oxygen sensor.
+Compensation helps us adjust changes in thermal variations, salinity and atmospheric pressure.
 
 ```c++
 sensorDS18B20.requestTemperatures();
 _waterTemp = sensorDS18B20.getTempCByIndex(0);
-
-sensors.updateValue(sensors);
-_SAL = sensors.takingreadSAL();
 ```
 
 ```c++
-sensors.setTempCompensationDO(_waterTemp);
-sensors.setSalCompensationDO(_SAL);
+sensors.setTempCompensationDO(_waterTemp); // Temperature compensation for Dissolved Oxygen
+sensors.setTempCompensationEC(_waterTemp); // Temperature compensation for Electric Conductivity
+sensors.setTempCompensationPH(_waterTemp); // Temperature compensation for PH
+sensors.AtmosphericPressureCompensationDO(pressure); // Pressure compensation for Disolved Oxygen (add sensor value in "pressure")
+sensors.setSalCompensationDO(sensors.takingreadSAL()); // Salinity compensation for Dissolved Oxygen
 ```
 
 ## Note
