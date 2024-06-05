@@ -1,6 +1,6 @@
 <h1 align="center"> AquaNode Library </h1>
 
-![download](https://github.com/FranklinZamora/SensorsNAS/assets/139190968/0c768f99-d653-4530-8a79-bbc6fb6a6de6)
+![image](https://github.com/FranklinZamora/SensorsNAS/assets/139190968/0cad5830-16f4-4c51-8319-8113ade24177)
 
 
 
