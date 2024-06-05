@@ -1,6 +1,6 @@
 <h1 align="center"> AquaNode Library </h1>
 
-![image](https://github.com/FranklinZamora/SensorsNAS/assets/139190968/0cad5830-16f4-4c51-8319-8113ade24177)
+![image]([https://github.com/FranklinZamora/SensorsNAS/assets/139190968/0cad5830-16f4-4c51-8319-8113ade24177](https://www.google.com/imgres?q=ochoa%20technology&imgurl=https%3A%2F%2Fii.ct-stc.com%2F2%2Flogos%2Fempresas%2F2019%2F01%2F16%2F903bc4a0c02347f9afa3185359087thumbnail.png&imgrefurl=https%3A%2F%2Fmx.computrabajo.com%2Fempresas%2Fofertas-de-trabajo-de-ochoa-technology--4B95D181735021E1&docid=tH7V_kkh2fbwVM&tbnid=IL0gtX-sJ4lZLM&vet=12ahUKEwj6w-3i98SGAxXQLtAFHfFkLBcQM3oECHIQAA..i&w=200&h=134&hcb=2&itg=1&ved=2ahUKEwj6w-3i98SGAxXQLtAFHfFkLBcQM3oECHIQAA))
 
 
 [![NAS-Board - Library](https://img.shields.io/badge/NAS--Board-Library-blue?logo=c%2B%2B)](https://)
